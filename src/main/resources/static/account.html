@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ sơ Cá nhân - Dịch vụ Tại Nhà</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Icons&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="/css/style_index.css" rel="stylesheet"> <link href="/css/style_account.css" rel="stylesheet"> 
+    <link rel="icon" href="data:," />
+</head>
+<body>
+    <div id="alert-box" class="alert"></div>
+
+    <header class="main-header">
+        <div class="container header-container">
+            <a href="/home.html" class="logo">
+                <img src="/assets/logo/Ho_Anh_Tuan.png" alt="Logo" style="height: 50px; border-radius: 17px;">
+                <span class="logo-text">Dịch vụ Tại Nhà</span>
+            </a>
+            <nav class="main-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="/home.html" class="nav-link">Trang chủ</a></li>
+                    <li class="nav-item"><a href="/introduce.html" class="nav-link">Giới thiệu</a></li>
+                    <li class="nav-item"><a href="/services.html" class="nav-link">Dịch vụ</a></li>
+                    <li class="nav-item"><a href="/service_price_list.html" class="nav-link">Bảng giá</a></li>
+                    <li class="nav-item"><a href="/contact.html" class="nav-link">Liên hệ</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <div id="auth-section"> </div>
+                <button class="hamburger" aria-label="Menu">
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="/home.html"><i class="fas fa-home"></i> Trang chủ</a>
+                <span class="separator"><i class="fas fa-angle-right"></i></span>
+                <span>Hồ sơ Cá nhân</span>
+            </div>
+
+            <div class="profile-container">
+                <!-- Profile Display -->
+                <div class="booking-container">
+                    <div class="booking-header">
+                        <h2><i class="fas fa-user"></i> Hồ sơ Cá nhân</h2>
+                        <p class="subtitle">Quản lý thông tin cá nhân của bạn tại đây.</p>
+                    </div>
+                    <div class="booking-wrapper">
+                        <div class="profile-image" id="profile-image">
+                            <div class="avatar-container">
+                                <img src="/assets/avatar/default-avatar.png" alt="Avatar" class="avatar-img" id="avatar-img">
+                            </div>
+                            <label for="avatar-upload" class="avatar-upload-label">
+                                <i class="fas fa-camera"></i> Thay đổi ảnh
+                            </label>
+                            <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
+                            <div id="image-preview" style="margin-top: 10px;">
+                                <img id="preview-img" src="" alt="Ảnh xem trước" style="display: none; max-width: 100px; max-height: 100px; object-fit: cover; border-radius: 4px;">
+                            </div>
+                        </div>
+                        <div class="profile-info" id="profile-info">
+                            <!-- Thông tin sẽ được tải động từ API -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Update Form -->
+                <div class="booking-container booking-form-container">
+                    <div class="booking-form-title">
+                        <i class="fas fa-edit"></i> Cập nhật Thông tin
+                    </div>
+                    <form class="booking-form" id="update-profile-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="full-name">Họ và Tên <span class="required">*</span></label>
+                                <input type="text" id="full-name" required placeholder="Nhập họ và tên đầy đủ">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" readonly placeholder="Email không thể thay đổi">
+                                <small class="form-text">Email được sử dụng để đăng nhập và khôi phục mật khẩu</small>
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="phone">Số điện thoại <span class="required">*</span></label>
+                            <input type="tel" id="phone" required placeholder="VD: 0123456789">
+                            <small class="form-text">Số điện thoại để liên hệ đặt lịch dịch vụ</small>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="address">Địa chỉ <span class="required">*</span></label>
+                            <input type="text" id="address" required placeholder="VD: 123 Đường ABC, Quận 1, TP.HCM">
+                            <small class="form-text">Địa chỉ nhận dịch vụ tại nhà</small>
+                        </div>
+                        <button type="submit" class="cta-btn">
+                            <span class="btn-text">Lưu Thay Đổi</span>
+                            <i class="fas fa-save"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <a href="/home.html" class="footer-logo">
+                    <img src="/assets/logo/Ho_Anh_Tuan.png" alt="Logo" class="footer-logo-img">
+                    <span>Dịch vụ Tại Nhà</span>
+                </a>
+                <p class="footer-desc">Cung cấp các dịch vụ tại nhà chất lượng cao, uy tín và chuyên nghiệp với đội ngũ kỹ thuật viên giàu kinh nghiệm.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a href="#" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h4><i class="fas fa-compass"></i> Điều hướng</h4>
+                <ul class="footer-links">
+                    <li><a href="/home.html"><i class="fas fa-home"></i> Trang chủ</a></li>
+                    <li><a href="/introduce.html"><i class="fas fa-info-circle"></i> Giới thiệu</a></li>
+                    <li><a href="/services.html"><i class="fas fa-cogs"></i> Dịch vụ</a></li>
+                    <li><a href="/service_price_list.html"><i class="fas fa-tags"></i> Bảng giá</a></li>
+                    <li><a href="/contact.html"><i class="fas fa-phone"></i> Liên hệ</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4><i class="fas fa-tools"></i> Dịch vụ</h4>
+                <ul class="footer-links" id="footer-services">
+                    <!-- Services sẽ được load động -->
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4><i class="fas fa-headset"></i> Hỗ trợ</h4>
+                <ul class="footer-links">
+                    <li><a href="/terms.html"><i class="fas fa-file-contract"></i> Điều khoản sử dụng</a></li>
+                    <li><a href="/privacy.html"><i class="fas fa-shield-alt"></i> Chính sách bảo mật</a></li>
+                    <li><a href="/faq.html"><i class="fas fa-question-circle"></i> Câu hỏi thường gặp</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Dịch vụ Tại Nhà. All rights reserved. Thiết kế bởi <a href="#">Hồ Anh Tuấn</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="/js/notification.js?v=1.2"></script>
+    <script>
+        // 🔹 GLOBAL HELPER: Xử lý lỗi load ảnh (global để dùng ở nhiều nơi)
+        function handleImageError(img, originalSrc) {
+            console.error('❌ Lỗi tải ảnh ban đầu:', img.src);
+            if (img.src.includes('avatar.png')) return;  // Tránh loop nếu đã default
+
+            // Hiển thị loading ngắn (3s) thay vì error ngay
+            const loadingTimeout = showAlert('Đang tải lại ảnh đại diện...', 'info');
+
+            // Retry sau 2 giây (fix delay server static cache)
+            setTimeout(() => {
+                console.log('🔄 Retry load ảnh:', originalSrc);
+                const retrySrc = originalSrc + '?t=' + Date.now();  // Cache-buster mới
+                img.src = retrySrc;
+                img.onerror = null;  // Reset để tránh loop
+                img.onload = () => {  // Xác nhận load thành công
+                    console.log('✅ Retry thành công!');
+                    clearTimeout(loadingTimeout);  // Clear loading alert
+                    // Không show success alert để tránh spam, chỉ log
+                    // Nếu muốn: showAlert('Ảnh đã tải thành công!', 'success');
+                };
+                img.onerror = () => {  // Fallback chỉ nếu retry fail (sau onload)
+                    console.error('❌ Retry fail, fallback default');
+                    img.src = '/assets/avatar/default-avatar.png';
+                    clearTimeout(loadingTimeout);  // Clear loading trước error
+                    showAlert('Không thể tải ảnh. Sử dụng ảnh mặc định.', 'error');
+                };
+            }, 2000);  // 2 giây delay để server sync file
+        }
+
+        // 🔹 ALERT SYSTEM - Hệ thống hiển thị thông báo (sửa để có timeout id cho clear)
+        function showAlert(message, type = 'info') {
+            let alertBox = document.getElementById('alert-box');
+            if (!alertBox) {
+                alertBox = document.createElement('div');
+                alertBox.id = 'alert-box';
+                alertBox.className = 'alert';
+                document.body.insertBefore(alertBox, document.body.firstChild);
+            }
+            
+            alertBox.className = `alert ${type === 'success' ? 'success-alert' : type === 'error' ? 'error-alert' : 'info-alert'}`;
+            alertBox.innerHTML = `
+                <div class="alert-content">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-triangle' : 'fa-info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+                <button class="close-alert" aria-label="Đóng"><i class="fas fa-times"></i></button>
+            `;
+            alertBox.style.display = 'flex';
+
+            // Trả về timeout id để clear nếu cần
+            const timeoutId = setTimeout(() => { 
+                if (alertBox) alertBox.style.display = 'none'; 
+            }, type === 'info' ? 3000 : 5000);  // Info alert ngắn hơn (3s)
+
+            alertBox.querySelector('.close-alert')?.addEventListener('click', () => {
+                clearTimeout(timeoutId);
+                alertBox.style.display = 'none';
+            });
+
+            return timeoutId;  // Trả id để clear từ ngoài
+        }
+
+        // 🔹 AVATAR UPLOAD SYSTEM - Hệ thống tải lên ảnh đại diện
+        async function setupAvatarUpload() {
+            const avatarInput = document.getElementById('avatar-upload');
+            const avatarImg = document.getElementById('avatar-img');
+            const avatarLabel = document.querySelector('.avatar-upload-label');
+            const previewImg = document.getElementById('preview-img');
+
+            if (!avatarInput || !avatarImg || !avatarLabel || !previewImg) return;
+
+            // Gán onerror cho avatar img (sử dụng global handleImageError)
+            avatarImg.onerror = () => handleImageError(avatarImg, avatarImg.src);
+
+            avatarInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                // Validate file
+                const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                if (!validImageTypes.includes(file.type)) {
+                    showAlert('Vui lòng chọn file ảnh (JPEG, PNG, hoặc GIF)', 'error');
+                    avatarInput.value = '';
+                    return;
+                }
+
+                if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                    showAlert('Kích thước ảnh không được vượt quá 5MB', 'error');
+                    avatarInput.value = '';
+                    return;
+                }
+
+                // Preview image
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImg.src = e.target.result;
+                    previewImg.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+
+                // Upload image to server
+                const token = localStorage.getItem('jwtToken');
+                if (!token) {
+                    showAlert('Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.', 'error');
+                    window.location.href = '/login.html';
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('avatar', file);
+
+                avatarLabel.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang tải lên...';
+                avatarLabel.style.pointerEvents = 'none';
+
+                try {
+                    const response = await fetch('/api/users/me/avatar', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: formData
+                    });
+
+                    console.log('Response status:', response.status);
+                    // In ra header để debug nếu cần
+                    console.log('Response headers:', Object.fromEntries(response.headers.entries ? [...response.headers.entries()] : Object.entries(response.headers)));
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`Lỗi tải lên ảnh: ${errorText || `HTTP ${response.status} - ${response.statusText}`}`);
+                    }
+
+                    const result = await response.json();
+                    console.log('✅ Tải ảnh thành công - Server trả về:', result);
+
+                    // --- [ĐOẠN SỬA QUAN TRỌNG] ---
+                    // Kiểm tra cả 2 trường hợp: avatarURL (Backend mới) hoặc avatarUrl (Backend cũ)
+                    const serverAvatarUrl = result.avatarURL || result.avatarUrl;
+
+                    if (serverAvatarUrl) {
+                        // Cập nhật ảnh to
+                        // Cloudinary không cần cache-buster (?t=...) vì link ảnh thay đổi luôn, nhưng giữ lại cũng ko sao
+                        const newSrc = serverAvatarUrl; 
+                        
+                        avatarImg.src = newSrc;
+                        
+                        // Cập nhật luôn ảnh nhỏ trên góc phải màn hình (Header)
+                        const headerAvatar = document.querySelector('.user-menu-trigger .user-avatar');
+                        if (headerAvatar) headerAvatar.src = newSrc;
+
+                        // Ẩn ảnh xem trước
+                        previewImg.src = '';
+                        previewImg.style.display = 'none';
+                        
+                        // Hiện thông báo thành công
+                        showAlert('Ảnh đại diện đã được cập nhật thành công!', 'success');
+                        
+                        // Gọi hàm load lại thông tin user để đồng bộ dữ liệu
+                        await loadUserProfile();
+                    } else {
+                        console.error("Dữ liệu server trả về:", result);
+                        throw new Error('Không nhận được URL ảnh từ server (Key không khớp)');
+                    }
+                    // -----------------------------
+
+                } catch (error) {
+                    console.error('❌ Lỗi tải ảnh:', error);
+                    showAlert(`Lỗi tải ảnh: ${error.message}`, 'error');
+                    // Nếu lỗi thì fallback về ảnh mặc định
+                    avatarImg.src = '/assets/avatar/default-avatar.png'; 
+                    previewImg.src = '';
+                    previewImg.style.display = 'none';
+                } finally {
+                    avatarLabel.innerHTML = '<i class="fas fa-camera"></i> Thay đổi ảnh';
+                    avatarLabel.style.pointerEvents = 'auto';
+                    avatarInput.value = '';
+                }
+            });
+        }
+
+        // 🔹 USER DROPDOWN - CLICK TO TOGGLE
+        function setupUserMenuDropdown() {
+            const userMenuContainer = document.querySelector('.user-menu-container');
+            const userDropdown = document.querySelector('.user-dropdown');
+            const userMenuTrigger = document.querySelector('.user-menu-trigger');
+            
+            if (!userMenuContainer || !userDropdown || !userMenuTrigger) return;
+
+            let dropdownVisible = false;
+            let timeoutId = null;
+
+            // CLICK để toggle
+            userMenuTrigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                
+                dropdownVisible = !dropdownVisible;
+                
+                if (dropdownVisible) {
+                    userDropdown.style.display = 'block';
+                    userMenuContainer.classList.add('active');
+                    document.body.classList.add('dropdown-open');
+                    userMenuTrigger.setAttribute('aria-expanded', 'true');
+                } else {
+                    userDropdown.style.display = 'none';
+                    userMenuContainer.classList.remove('active');
+                    document.body.classList.remove('dropdown-open');
+                    userMenuTrigger.setAttribute('aria-expanded', 'false');
+                }
+                
+                if (timeoutId) {
+                    clearTimeout(timeoutId);
+                    timeoutId = null;
+                }
+            });
+
+            // HOVER backup
+            const showDropdown = () => {
+                if (timeoutId) clearTimeout(timeoutId);
+                userMenuContainer.classList.add('active');
+                userDropdown.style.display = 'block';
+            };
+
+            const hideDropdown = () => {
+                timeoutId = setTimeout(() => {
+                    if (!dropdownVisible) {
+                        userDropdown.style.display = 'none';
+                        userMenuContainer.classList.remove('active');
+                        document.body.classList.remove('dropdown-open');
+                        userMenuTrigger.setAttribute('aria-expanded', 'false');
+                    }
+                }, 150);
+            };
+
+            userMenuContainer.addEventListener('mouseenter', showDropdown);
+            userMenuContainer.addEventListener('mouseleave', hideDropdown);
+            userDropdown.addEventListener('mouseenter', showDropdown);
+            userDropdown.addEventListener('mouseleave', hideDropdown);
+
+            // CLICK NGOÀI để đóng
+            document.addEventListener('click', (e) => {
+                if (!userMenuContainer.contains(e.target)) {
+                    dropdownVisible = false;
+                    userDropdown.style.display = 'none';
+                    userMenuContainer.classList.remove('active');
+                    document.body.classList.remove('dropdown-open');
+                    userMenuTrigger.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            // ESC để đóng
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && dropdownVisible) {
+                    dropdownVisible = false;
+                    userDropdown.style.display = 'none';
+                    userMenuContainer.classList.remove('active');
+                    document.body.classList.remove('dropdown-open');
+                    userMenuTrigger.setAttribute('aria-expanded', 'false');
+                    userMenuTrigger.focus();
+                }
+            });
+
+            // Keyboard navigation
+            userMenuTrigger.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    userMenuTrigger.click();
+                }
+            });
+        }
+
+        // 🔹 AUTH SECTION
+        async function loadAuthSection() {
+            const authSection = document.getElementById('auth-section');
+            if (!authSection) return;
+
+            const token = localStorage.getItem('jwtToken');
+            if (token) {
+                const avatarUrl = await getUserAvatarUrl();
+                authSection.innerHTML = `
+                    <div class="user-menu-container" role="menubar">
+                        <div class="user-menu-trigger" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">
+                            <img src="${avatarUrl || '/assets/avatar/default-avatar.png'}" alt="Avatar người dùng" class="user-avatar" id="user-avatar-img">
+                            <span class="user-name" aria-label="Tài khoản người dùng">Tài khoản</span>
+                            <i class="fas fa-chevron-down dropdown-icon" aria-hidden="true"></i>
+                        </div>
+                        <div class="user-dropdown" role="menu">
+                            <a href="/account.html" class="user-dropdown-item" role="menuitem" tabindex="-1">
+                                <i class="fas fa-user"></i>
+                                <span>Hồ sơ cá nhân</span>
+                            </a>
+                            <a href="/my_bookings.html" class="user-dropdown-item" role="menuitem" tabindex="-1">
+                                <i class="fas fa-calendar-check"></i>
+                                <span>Đơn đặt dịch vụ</span>
+                            </a>
+                            <a href="/change_password.html" class="user-dropdown-item" role="menuitem" tabindex="-1">
+                                <i class="fas fa-key"></i>
+                                <span>Đổi mật khẩu</span>
+                            </a>
+                            <div class="dropdown-divider" role="separator"></div>
+                            <a href="#" class="user-dropdown-item logout" onclick="logout(event)" role="menuitem" tabindex="-1">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Đăng xuất</span>
+                            </a>
+                        </div>
+                    </div>`;
+
+                    const initialCount = localStorage.getItem('unreadNotificationCount') || 0;
+                    updateBadgeCount(initialCount);
+                setupUserMenuDropdown();
+                setupNotificationClick();
+                // Gán onerror cho user avatar sau khi render
+                const userAvatar = document.getElementById('user-avatar-img');
+                if (userAvatar) {
+                    userAvatar.onerror = () => handleImageError(userAvatar, userAvatar.src);
+                }
+            } else {
+                authSection.innerHTML = `
+                    <div class="auth-buttons">
+                        <a href="/login.html" class="btn btn-outline" role="button" aria-label="Đăng nhập">
+                            <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                        </a>
+                        <a href="/register.html" class="btn btn-primary" role="button" aria-label="Đăng ký tài khoản">
+                            <i class="fas fa-user-plus"></i> Đăng ký
+                        </a>
+                    </div>`;
+            }
+        }
+
+        // Sửa: Sử dụng data.avatarURL (uppercase U) để match với JSON từ User entity
+        async function getUserAvatarUrl() {
+            const token = localStorage.getItem('jwtToken');
+            if (!token) return '/assets/avatar/default-avatar.png';
+            try {
+                const response = await fetch('/api/users/me', { 
+                    headers: { 'Authorization': `Bearer ${token}` } 
+                });
+                if (!response.ok) return '/assets/avatar/default-avatar.png';
+                const data = await response.json();
+                console.log('Avatar URL từ API (getUserAvatarUrl):', data.avatarURL);  // Debug log
+                return data.avatarURL || '/assets/avatar/default-avatar.png';  // SỬA: avatarURL uppercase
+            } catch (error) {
+                console.error('❌ Lỗi lấy avatarUrl:', error);
+                return '/assets/avatar/default-avatar.png';
+            }
+        }
+
+        function logout(event) {
+            event.preventDefault();
+            localStorage.removeItem('jwtToken');
+            showAlert('Đăng xuất thành công!', 'success');
+            setTimeout(() => { window.location.href = '/login.html'; }, 1500);
+        }
+
+        // 🔹 LOAD USER PROFILE - Tải thông tin hồ sơ người dùng
+        async function loadUserProfile() {
+            try {
+                const token = localStorage.getItem('jwtToken');
+                if (!token) {
+                    alert('Vui lòng đăng nhập để xem thông tin tài khoản.');
+                    window.location.href = '/login.html';
+                    return;
+                }
+
+                const response = await fetch('/api/users/me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Lỗi API: ${response.status} ${response.statusText}`);
+                }
+
+                const userData = await response.json();
+                console.log('✅ Dữ liệu từ API:', JSON.stringify(userData, null, 2));
+
+                const data = userData.data ? userData.data : userData;
+
+                // Hiển thị thông tin
+                const profileInfo = document.getElementById('profile-info');
+                profileInfo.innerHTML = `
+                    <p><strong>Tên:</strong> ${data.ho_ten || data.hoTen || 'Chưa cập nhật'}</p>
+                    <p><strong>Email:</strong> ${data.email || 'Chưa cập nhật'}</p>
+                    <p><strong>Số điện thoại:</strong> ${data.sdt || 'Chưa cập nhật'}</p>
+                    <p><strong>Địa chỉ:</strong> ${data.dia_chi || data.diaChi || 'Chưa cập nhật'}</p>
+                `;
+
+                // Load avatar từ đường dẫn tĩnh - SỬA: Sử dụng data.avatarURL (uppercase U) để match với JSON từ User entity
+                const profileImage = document.getElementById('avatar-img');
+                if (profileImage) {
+                    const avatarSrc = data.avatarURL ? data.avatarURL + '?t=' + Date.now() : '/assets/avatar/default-avatar.png';  // Cache-buster
+                    profileImage.src = avatarSrc;
+                    console.log('Set avatar src (loadUserProfile):', avatarSrc);  // Debug log
+                    profileImage.onerror = () => handleImageError(profileImage, data.avatarURL || avatarSrc);  // Gán với src gốc
+                }
+
+                // Update user avatar in auth section
+                const userAvatar = document.querySelector('.user-menu-container .user-avatar');
+                if (userAvatar) {
+                    userAvatar.src = profileImage.src;
+                    // onerror đã gán trong loadAuthSection
+                }
+
+                // Điền form
+                const form = document.getElementById('update-profile-form');
+                if (form) {
+                    form.querySelector('#full-name').value = data.ho_ten || data.hoTen || '';
+                    form.querySelector('#email').value = data.email || '';
+                    form.querySelector('#phone').value = data.sdt || '';
+                    form.querySelector('#address').value = data.dia_chi || data.diaChi || '';
+                }
+
+            } catch (error) {
+                console.error('❌ Lỗi khi tải thông tin:', error);
+                showAlert(`Lỗi tải thông tin: ${error.message}`, 'error');
+                
+                // Fallback avatar
+                const profileImage = document.getElementById('avatar-img');
+                if (profileImage) {
+                    profileImage.src = '/assets/avatar/default-avatar.png';
+                }
+                const userAvatar = document.querySelector('.user-menu-container .user-avatar');
+                if (userAvatar) {
+                    userAvatar.src = '/assets/avatar/default-avatar.png';
+                }
+            }
+        }
+
+        // 🔹 FORM SUBMIT - KHÔNG GỬI EMAIL - Xử lý form cập nhật thông tin
+        document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('update-profile-form');
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Validation
+                const fullName = document.getElementById('full-name').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const address = document.getElementById('address').value.trim();
+
+                if (!fullName || !phone || !address) {
+                    showAlert('Vui lòng điền đầy đủ thông tin bắt buộc (*)', 'error');
+                    return;
+                }
+
+                const phoneRegex = /^0\d{9}$/;
+                if (!phoneRegex.test(phone.replace(/\s+/g, ''))) {
+                    showAlert('Số điện thoại không hợp lệ. Vui lòng nhập 10 số bắt đầu bằng 0', 'error');
+                    document.getElementById('phone').focus();
+                    return;
+                }
+
+                const token = localStorage.getItem('jwtToken');
+                if (!token) {
+                    showAlert('Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.', 'error');
+                    window.location.href = '/login.html';
+                    return;
+                }
+
+                const submitButton = e.target.querySelector('button[type="submit"]');
+                const btnText = submitButton.querySelector('.btn-text');
+                const originalText = btnText.textContent;
+
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang lưu...';
+
+                // GỬI DỮ LIỆU DƯỚI DẠNG JSON
+                const updatedData = {
+                    hoTen: fullName,
+                    sdt: phone,
+                    diaChi: address
+                };
+
+                console.log('Gửi cập nhật:', updatedData);
+
+                try {
+                    const response = await fetch('/api/users/me', {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(updatedData)
+                    });
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error('Lỗi server:', errorText);
+                        if (response.status === 403) {
+                            showAlert('Không có quyền cập nhật thông tin.', 'error');
+                        } else if (response.status === 401) {
+                            showAlert('Phiên đăng nhập không hợp lệ.', 'error');
+                            localStorage.removeItem('jwtToken');
+                            setTimeout(() => window.location.href = '/login.html', 1500);
+                        } else {
+                            showAlert(`Lỗi: ${errorText || 'Không thể cập nhật'}`, 'error');
+                        }
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    console.log('Cập nhật thành công:', result);
+                    showAlert('Thông tin đã được cập nhật thành công!', 'success');
+                    await loadUserProfile();
+
+                } catch (error) {
+                    console.error('Lỗi cập nhật:', error);
+                    showAlert(`Lỗi cập nhật: ${error.message}`, 'error');
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = `<span class="btn-text">${originalText}</span><i class="fas fa-save"></i>`;
+                }
+            });
+        }
+
+        // Khởi tạo
+        loadAuthSection();
+        loadUserProfile();
+        setupAvatarUpload();
+    });
+    </script>
+</body>
+</html>

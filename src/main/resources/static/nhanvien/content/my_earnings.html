@@ -1,0 +1,56 @@
+<div class="content-header">
+    <h2><i class="fas fa-dollar-sign"></i> Thu nhập của tôi</h2>
+    <p>Thống kê thu nhập 30% hoa hồng từ các đơn hàng đã hoàn thành.</p>
+</div>
+
+<!-- BỘ LỌC THÁNG / NĂM -->
+<div class="earnings-controls">
+    <select id="earnings-month-filter" class="form-select">
+        <option value="all">Tất cả các tháng</option>
+        <!-- JS sẽ tự động điền các tháng 1-12 -->
+    </select>
+    
+    <select id="earnings-year-filter" class="form-select">
+        <!-- JS sẽ tự động điền các năm (ví dụ: 2025, 2024) -->
+    </select>
+</div>
+
+<!-- THẺ THỐNG KÊ (JS SẼ CẬP NHẬT SỐ) -->
+<div class="stats-row">
+    <div class="stat-card total-earned">
+        <h4 class="stat-title">Tổng Thu Nhập (Tháng này)</h4>
+        <div class="stat-value" id="stat-total-earned">0 đ</div>
+    </div>
+    <div class="stat-card paid">
+        <h4 class="stat-title">Đã Thanh Toán</h4>
+        <div class="stat-value" id="stat-paid">0 đ</div>
+    </div>
+    <div class="stat-card unpaid">
+        <h4 class="stat-title">Chờ Thanh Toán</h4>
+        <div class="stat-value" id="stat-unpaid">0 đ</div>
+    </div>
+</div>
+
+<!-- BẢNG CHI TIẾT CÁC ĐƠN HÀNG HOÀN THÀNH -->
+<div class="table-responsive">
+    <table class="data-table earnings-table">
+        <thead>
+            <tr>
+                <th>Dịch vụ</th>
+                <th>Khách hàng</th>
+                <th>Tổng đơn</th>
+                <th class="col-amount">Thu nhập (30%)</th>
+                <th class="col-status">TT Lương</th>
+                <th>Chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="earnings-table-body">
+            <!-- JS sẽ điền dữ liệu vào đây -->
+        </tbody>
+    </table>
+</div>
+
+<!-- PHÂN TRANG (Tái sử dụng) -->
+<div class="pagination-container" id="earnings-pagination">
+    <!-- JS sẽ điền các nút bấm trang vào đây -->
+</div>

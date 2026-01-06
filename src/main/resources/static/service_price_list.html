@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Giá Dịch Vụ | Dịch Vụ Tại Nhà</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Icons&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="/css/style_index.css" rel="stylesheet">
+    <link href="/css/style_service_price_list.css" rel="stylesheet"> <style></style>
+    <link href="/css/chatbot.css" rel="stylesheet">
+</head>
+<body>
+    <div id="success-alert" class="alert success-alert" style="display: none;">
+        <div class="alert-content">
+            <i class="fas fa-check-circle"></i>
+            <span id="success-message"></span>
+        </div>
+        <button class="close-alert"><i class="fas fa-times"></i></button>
+    </div>
+
+    <header class="main-header">
+        <div class="container header-container">
+            <a href="/home.html" class="logo">
+                <img src="/assets/logo/Ho_Anh_Tuan.png" alt="Logo" style="height: 50px; border-radius: 17px;">
+                <span class="logo-text">Dịch vụ Tại Nhà</span>
+            </a>
+            <nav class="main-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="/home.html" class="nav-link">Trang chủ</a></li>
+                    <li class="nav-item"><a href="/introduce.html" class="nav-link">Giới thiệu</a></li>
+                    <li class="nav-item"><a href="/services.html" class="nav-link">Dịch vụ</a></li>
+                    <li class="nav-item"><a href="/service_price_list.html" class="nav-link active">Bảng giá</a></li>
+                    <li class="nav-item"><a href="/contact.html" class="nav-link">Liên hệ</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <div id="auth-section"></div>
+                <button class="hamburger" aria-label="Menu">
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Bảng Giá Dịch Vụ Tại Nhà</h1>
+            <p>Giá minh bạch - Chất lượng đảm bảo - Phục vụ tận nơi tại TP.HCM</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <section class="filter-section">
+            <form class="filter-form" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="category-filter">Danh mục dịch vụ</label>
+                    <select id="category-filter" class="form-control">
+                        <option value="all">Tất cả danh mục</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Mức giá tối đa: <span id="priceValue">5.000.000 VNĐ</span></label>
+                    <div class="range-slider">
+                        <input type="range" id="max_price" min="0" max="5000000" step="50000" value="5000000" class="price-range">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="search-input">Tìm kiếm dịch vụ</label>
+                    <input type="text" id="search-input" placeholder="VD: vệ sinh máy lạnh..." class="form-control">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="apply-filter" class="filter-btn">Lọc ngay</button>
+                    <button type="button" id="reset-filter" class="filter-btn reset-btn">Xóa bộ lọc</button>
+                </div>
+            </form>
+        </section>
+
+        <div id="price-list-content">
+            <p class="loading-text">Đang tải bảng giá dịch vụ...</p>
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-widget about-widget">
+                        <a href="/home.html" class="footer-logo">
+                            <img src="/assets/logo/Ho_Anh_Tuan.png" alt="Logo">
+                            <span>Dịch vụ Tại Nhà</span>
+                        </a>
+                        <p>Cung cấp các dịch vụ tại nhà chất lượng cao, uy tín và chuyên nghiệp.</p>
+                    </div>
+                    <div class="footer-widget">
+                        <h3 class="widget-title">Điều hướng</h3>
+                        <ul class="widget-links">
+                            <li><a href="/home.html">Trang chủ</a></li>
+                            <li><a href="/introduce.html">Giới thiệu</a></li>
+                            <li><a href="/services.html">Dịch vụ</a></li>
+                            <li><a href="/service_price_list.html">Bảng giá</a></li>
+                            <li><a href="/contact.html">Liên hệ</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-widget">
+                        <h3 class="widget-title">Dịch vụ</h3>
+                        <ul class="widget-links" id="footer-services"></ul>
+                    </div>
+                    <div class="footer-widget">
+                        <h3 class="widget-title">Hỗ trợ</h3>
+                        <ul class="widget-links">
+                            <li><a href="/terms.html">Điều khoản sử dụng</a></li>
+                            <li><a href="/privacy.html">Chính sách bảo mật</a></li>
+                            <li><a href="/faq.html">Câu hỏi thường gặp</a></li>
+                            <li><a href="/return_policy.html">Chính sách hoàn tiền</a></li>
+                            <li><a href="/support.html">Trung tâm trợ giúp</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>© 2025 Dịch vụ Tại Nhà. Thiết kế bởi Hồ Anh Tuấn</p>
+            </div>
+        </div>
+    </footer>
+
+    <button id="backToTop" class="back-to-top"><i class="fas fa-chevron-up"></i></button>
+
+    <!-- CHAT SUPPORT ĐÃ ĐƯỢC CẬP NHẬT GIỐNG services.html -->
+    <div class="chat-support">
+        <div class="chat-icon" id="chatIcon">
+            <i class="fas fa-comments"></i>
+            <span class="chat-notification" style="display: none;"></span>
+        </div>
+        <div class="chat-box" id="chatBox">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <div class="chat-avatar"><i class="fas fa-headset"></i></div>
+                    <div>
+                        <h3>Hỗ trợ trực tuyến</h3>
+                        <span class="online-status"><i class="fas fa-circle"></i> Đang trực tuyến</span>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <button id="minimizeChat"><i class="fas fa-minus"></i></button>
+                    <button id="closeChat"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input">
+                <input type="text" id="messageInput" placeholder="Nhập tin nhắn..." autocomplete="off">
+                <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="/js/chatbot.js"></script>
+    <script src="/js/notification.js?v=1.3"></script>
+<script>
+    let allServices = [];
+    let allCategories = [];
+
+    // --- [SỬA 1] THÊM HÀM NÀY VÀO ĐẦU ---
+    // Hàm xử lý link ảnh thông minh (Chạy được cả Local, Render và Cloudinary)
+    function getImageUrl(imagePath) {
+        if (!imagePath) return '/assets/images/service-default.jpg'; // Ảnh mặc định
+        
+        // 1. Nếu là link online (Cloudinary) -> Giữ nguyên
+        if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
+            return imagePath;
+        }
+        
+        // 2. Nếu là đường dẫn cũ (/assets/...) -> Giữ nguyên
+        if (imagePath.startsWith('/assets/')) {
+            return imagePath;
+        }
+        
+        // 3. Nếu chỉ là tên file (abc.jpg) -> Thêm đường dẫn vào
+        return `/assets/images/${imagePath}`;
+    }
+    // -------------------------------------
+
+    function removeDiacritics(str) {
+        return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D');
+    }
+
+    function renderPriceList(servicesToShow) {
+        if (servicesToShow.length === 0) {
+            document.getElementById('price-list-content').innerHTML = 
+                `<p style="text-align:center; padding:60px; color:#999; font-size:18px;">Không tìm thấy dịch vụ nào phù hợp.</p>`;
+            return;
+        }
+
+        const grouped = servicesToShow.reduce((acc, service) => {
+            const catName = service.category?.tenDanhMuc || 'Khác';
+            const catId = service.category?.id || 'other';
+            const icon = service.category?.icon || 'fas fa-tools';
+            if (!acc[catId]) acc[catId] = { name: catName, icon, services: [] };
+            acc[catId].services.push(service);
+            return acc;
+        }, {});
+
+        let html = '';
+        Object.values(grouped).forEach(group => {
+            html += `
+            <section class="category-section">
+                <div class="category-header">
+                    <div class="category-icon"><i class="${group.icon}"></i></div>
+                    <h2 class="category-title">${group.name}</h2>
+                    <span class="service-count">(${group.services.length} dịch vụ)</span>
+                </div>
+                <div class="services-grid">
+                    ${group.services.map(s => `
+                    <article class="service-card">
+                        <div class="service-image">
+                            
+                            <img src="${getImageUrl(s.imageURL)}" 
+                                 alt="${s.tenDichVu}" 
+                                 loading="lazy"
+                                 onerror="this.onerror=null;this.src='/assets/images/service-default.jpg';">
+                            
+                            ${s.thoiGianHoanThanh ? `<div class="service-badge"><i class="fas fa-clock"></i> ${s.thoiGianHoanThanh} phút</div>` : ''}
+                        </div>
+                        <div class="service-content">
+                            <h3 class="service-title">${s.tenDichVu}</h3>
+                            <p class="service-description">${s.moTa || 'Không có mô tả'}</p>
+                            <div class="service-price"><strong class="price-amount">${new Intl.NumberFormat('vi-VN').format(s.giaCoBan)} VNĐ</strong></div>
+                            <div class="service-footer">
+                                <a href="/booking.html?service_id=${s.id}" class="btn btn-primary"><i class="fas fa-calendar-check"></i> Đặt lịch</a>
+                                <a href="/service_detail.html?id=${s.id}" class="btn btn-outline"><i class="fas fa-info-circle"></i> Chi tiết</a>
+                            </div>
+                        </div>
+                    </article>
+                    `).join('')}
+                </div>
+            </section>`;
+        });
+
+        document.getElementById('price-list-content').innerHTML = html;
+    }
+
+    function applyFilters() {
+        let filtered = [...allServices];
+        const cat = document.getElementById('category-filter').value;
+        const maxPrice = parseInt(document.getElementById('max_price').value);
+        const query = document.getElementById('search-input').value.trim();
+
+        if (cat !== 'all') filtered = filtered.filter(s => s.category?.id == cat);
+        filtered = filtered.filter(s => s.giaCoBan <= maxPrice);
+        if (query) {
+            const q = removeDiacritics(query.toLowerCase());
+            filtered = filtered.filter(s => removeDiacritics(s.tenDichVu.toLowerCase()).includes(q));
+        }
+
+        renderPriceList(filtered);
+    }
+
+    async function loadData() {
+        try {
+            const [servicesRes, categoriesRes] = await Promise.all([
+                fetch('/api/services?page=0&size=200'),
+                fetch('/api/categories')
+            ]);
+
+            const servicesData = await servicesRes.json();
+            const categoriesData = await categoriesRes.json();
+
+            allServices = Array.isArray(servicesData.content) ? servicesData.content : servicesData;
+            allCategories = Array.isArray(categoriesData) ? categoriesData : [];
+
+            const catSelect = document.getElementById('category-filter');
+            allCategories.forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat.id;
+                opt.textContent = cat.tenDanhMuc;
+                catSelect.appendChild(opt);
+            });
+
+            renderPriceList(allServices);
+        } catch (err) {
+            console.error(err);
+            document.getElementById('price-list-content').innerHTML = 
+                `<p style="text-align:center; color:red; padding:60px;">Không thể tải dữ liệu. Vui lòng thử lại sau.</p>`;
+        }
+    }
+
+    function loadAuthSection() {
+        const token = localStorage.getItem('jwtToken');
+        const authSection = document.getElementById('auth-section');
+
+        if (token) {
+            fetch('/api/users/me', { headers: { 'Authorization': 'Bearer ' + token } })
+            .then(r => r.ok ? r.json() : Promise.reject())
+            .then(user => {
+                // [SỬA 3] Cũng dùng getImageUrl cho Avatar User để an toàn
+                // Lưu ý: Backend user trả về key là avatarURL
+                const avatar = getImageUrl(user.avatarURL || '/assets/avatar/default-avatar.png');
+                const hoTen = user.hoTen || 'Người dùng';
+
+                authSection.innerHTML = `
+                    <div class="header-actions">
+                            <div class="notification-container">
+                                <div class="notification-icon">
+                                    <i class="fas fa-bell"></i>
+                                    <span class="notification-badge" style="display: none;"></span>
+                                </div>
+                                <div class="notification-dropdown">
+                                    <div class="notification-header">
+                                        <h3>Thông báo</h3>
+                                        <button class="mark-all-read">Đánh dấu tất cả đã đọc</button>
+                                    </div>
+                                    <div class="notification-list" id="notification-list"></div>
+                                    <div class="notification-footer">
+                                        <a href="/notifications.html">Xem tất cả thông báo</a>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="user-menu-container">
+                            <div class="user-menu-trigger">
+                                <img src="${avatar}" alt="Avatar" class="user-avatar">
+                                <span class="user-name">${hoTen}</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="user-dropdown">
+                                <a href="/account.html" class="user-dropdown-item"><i class="fas fa-user"></i> Hồ sơ cá nhân</a>
+                                <a href="/my_bookings.html" class="user-dropdown-item"><i class="fas fa-calendar-check"></i> Đơn đặt dịch vụ</a>
+                                <a href="/cart.html" class="user-dropdown-item"><i class="fas fa-shopping-cart"></i> Giỏ hàng của tôi</a>
+                                <a href="/change_password.html" class="user-dropdown-item"><i class="fas fa-key"></i> Đổi mật khẩu</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" onclick="logout()" class="user-dropdown-item"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                                    const initialCount = localStorage.getItem('unreadNotificationCount') || 0;
+                    updateBadgeCount(initialCount);
+                    loadNotifications(token);
+                    setupNotificationClick();
+            })
+            .catch(() => { localStorage.clear(); location.reload(); });
+        } else {
+            authSection.innerHTML = `<div class="auth-buttons">
+                <a href="/login.html" class="btn btn-outline">Đăng nhập</a>
+                <a href="/register.html" class="btn btn-primary">Đăng ký</a>
+            </div>`;
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('userRole');
+        location.reload();
+    }
+
+    document.getElementById('max_price').addEventListener('input', e => {
+        document.getElementById('priceValue').textContent = new Intl.NumberFormat('vi-VN').format(e.target.value) + ' VNĐ';
+    });
+
+    document.getElementById('apply-filter').onclick = applyFilters;
+    document.getElementById('reset-filter').onclick = () => {
+        document.getElementById('category-filter').value = 'all';
+        document.getElementById('max_price').value = 5000000;
+        document.getElementById('priceValue').textContent = '5.000.000 VNĐ';
+        document.getElementById('search-input').value = '';
+        renderPriceList(allServices);
+    };
+    document.getElementById('search-input').oninput = applyFilters;
+    document.getElementById('category-filter').onchange = applyFilters;
+    document.getElementById('max_price').onchange = applyFilters;
+
+    document.querySelector('.hamburger').onclick = () => {
+        document.querySelector('.hamburger').classList.toggle('active');
+        document.querySelector('.nav-menu').classList.toggle('active');
+    };
+
+    document.addEventListener('click', e => {
+        const noti = e.target.closest('.notification-icon');
+        const user = e.target.closest('.user-menu-trigger');
+        if (noti) document.querySelector('.notification-dropdown')?.classList.toggle('show');
+        if (user) {
+            user.classList.toggle('active');
+            document.querySelector('.user-dropdown')?.classList.toggle('show');
+        }
+        if (!e.target.closest('.notification-container') && !e.target.closest('.user-menu-container')) {
+            document.querySelectorAll('.notification-dropdown.show, .user-dropdown.show').forEach(d => d.classList.remove('show'));
+            document.querySelectorAll('.user-menu-trigger.active').forEach(t => t.classList.remove('active'));
+        }
+    });
+
+    const backToTop = document.getElementById('backToTop');
+    window.onscroll = () => backToTop.classList.toggle('show', window.scrollY > 300);
+    backToTop.onclick = () => window.scrollTo({top: 0, behavior: 'smooth'});
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadAuthSection();
+        loadData();
+        if (typeof initChatbot === 'function') initChatbot();
+    });
+</script>
+</body>
+</html>

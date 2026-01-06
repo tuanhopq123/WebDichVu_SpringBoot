@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng Nhập Hệ Thống</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div id="toast-container"></div> 
+
+    <form id="loginForm">
+        <h2>Đăng Nhập</h2>
+        <label for="emailLog">Email:</label>
+        <input type="text" id="emailLog" name="email" required><br>
+
+        <label for="matKhauLog">Mật Khẩu:</label>
+        <input type="password" id="matKhauLog" name="matKhau" required><br>
+
+        <button type="submit">Đăng Nhập</button>
+        <p>Chưa có tài khoản? <a href="register.html">Đăng ký ngay!</a></p>
+        
+        <a href="/oauth2/authorization/google" class="google-btn">
+            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
+            Đăng nhập bằng Google
+        </a>
+    </form>
+    <script src="js/auth.js"></script>
+</body>
+</html>

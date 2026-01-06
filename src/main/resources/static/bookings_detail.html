@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết đơn hàng | Dịch Vụ Tại Nhà</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="/css/style_booking_detail.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <main class="container">
+        <div class="breadcrumb">
+            <a href="/home.html"><i class="fas fa-home"></i> Trang chủ</a> <span>/</span>
+            <a href="/my_bookings.html">Đơn đặt lịch</a> <span>/</span>
+            <span>Chi tiết đơn hàng</span>
+        </div>
+        <h2>Cảm ơn bạn đã đặt lịch! Chi tiết đơn hàng của bạn</h2>
+        <div class="order-id">
+            Mã đơn hàng: <span class="id-badge" id="order-id"></span>
+        </div>
+        <div class="booking-container">
+            <!-- Booking Header -->
+            <div class="booking-header">
+                <div class="booking-status">
+                    <div class="status-badge" id="order-status-badge">
+                        <!-- Render động trạng thái đơn hàng -->
+                    </div>
+                    <div class="status-badge" id="payment-status-badge">
+                        <!-- Render động trạng thái thanh toán -->
+                    </div>
+                </div>
+                <div class="booking-date">
+                    <i class="far fa-calendar-alt"></i> Đặt ngày: <span id="created-at"></span>
+                </div>
+            </div>
+            <div class="booking-content">
+                <div class="left-column">
+                    <div class="service-details">
+                        <div class="service-image">
+                            <img id="service-image" src="/assets/images/service-default.jpg" alt="Ảnh dịch vụ">
+                        </div>
+                        <div class="service-summary">
+                            <h3 id="service-title"></h3>
+                            <p><strong>Danh mục:</strong> <span id="service-category"></span></p>
+                            <p><strong>Thời lượng:</strong> <span id="service-duration"></span> phút</p>
+                            <p><strong>Giá:</strong> <span id="service-price"></span></p>
+                        </div>
+                    </div>
+                    <div class="info-section">
+                        <h4><i class="far fa-calendar-check"></i> Thông tin lịch hẹn</h4>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Ngày hẹn</span>
+                                <div class="info-value" id="booking-date"></div>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Giờ hẹn</span>
+                                <div class="info-value" id="booking-time"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="notes-section" id="notes-section" style="display: none;">
+                        <h4><i class="far fa-sticky-note"></i> Ghi chú đơn hàng</h4>
+                        <p id="notes-content"></p>
+                    </div>
+                </div>
+                <div class="right-column">
+                    <div class="info-section">
+                        <h4><i class="far fa-user"></i> Thông tin liên hệ</h4>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Số điện thoại</span>
+                                <div class="info-value" id="phone"></div>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Địa chỉ</span>
+                                <div class="info-value" id="address"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Order Timeline -->
+                    <div class="info-section">
+                        <h4><i class="fas fa-history"></i> Tiến trình đơn hàng</h4>
+                        <div class="timeline" id="timeline">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Booking Footer -->
+            <div class="booking-footer">
+                <div class="total-price" id="total-price"></div>
+                <div class="action-buttons">
+                    <a href="/my_bookings.html" class="action-btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> Quay lại
+                    </a>
+                    <div id="action-buttons-extra">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/notification.js"></script>
+    <script>
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('vi-VN');
+        }
+
+        function formatTimeAMPM(dateString) {
+            const dt = new Date(dateString);
+            let hours = dt.getHours();
+            const minutes = dt.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // Giờ 0 thành 12
+            return `${hours.toString().padStart(2, '0')}:${minutes} ${ampm}`;
+        }
+
+        function truncateText(text, maxWords) {
+            if (!text) return 'Không có ghi chú';
+            const words = text.trim().split(/\s+/);
+            if (words.length > maxWords) {
+                return words.slice(0, maxWords).join(' ') + '...';
+            }
+            return text;
+        }
+
+        // Lấy booking_id từ URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookingId = urlParams.get('booking_id');
+
+        // Load chi tiết đơn hàng
+        async function loadBookingDetails() {
+            try {
+                const token = localStorage.getItem('jwtToken');
+                if (!token) {
+                    alert('Vui lòng đăng nhập để xem chi tiết đơn hàng.');
+                    window.location.href = '/login.html';
+                    return;
+                }
+
+                const response = await fetch(`/api/orders/${bookingId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) {
+                    throw new Error('Không tìm thấy đơn hàng.');
+                }
+                const order = await response.json();
+
+                // Render Order ID
+                document.getElementById('order-id').textContent = '#' + order.id;
+
+                // Render trạng thái đơn hàng
+                const statusMap = {
+                    'CHUA_XU_LY': { class: 'status-pending', text: 'Đang chờ xác nhận', icon: 'fa-clock' },
+                    'DA_NHAN': { class: 'status-confirmed', text: 'Đã xác nhận', icon: 'fa-check-circle' },
+                    'HOAN_THANH': { class: 'status-completed', text: 'Hoàn thành', icon: 'fa-check-double' },
+                    'HUY': { class: 'status-cancelled', text: 'Đã hủy', icon: 'fa-times-circle' }
+                };
+                const orderStatus = statusMap[order.trangThai] || { class: 'status-unknown', text: 'Không xác định', icon: 'fa-question-circle' };
+                document.getElementById('order-status-badge').innerHTML = `<i class="fas ${orderStatus.icon}"></i> ${orderStatus.text}`;
+                document.getElementById('order-status-badge').className = `status-badge ${orderStatus.class}`;
+
+                // Render trạng thái thanh toán (trước nút hành động)
+let paymentStatus;
+const isCompleted = order.trangThai === 'HOAN_THANH';
+
+if (order.phuongThucThanhToan === 'CHUYEN_KHOAN') {
+    if (isCompleted || order.paymentStatus === 'PAID') {
+        paymentStatus = { class: 'status-completed', text: 'Đã thanh toán online', icon: 'fa-check-circle' };
+    } else {
+        paymentStatus = { class: 'status-pending', text: 'Chờ thanh toán online', icon: 'fa-clock' };
+    }
+} else if (order.phuongThucThanhToan === 'TIEN_MAT') {
+    if (isCompleted) {
+        paymentStatus = { class: 'status-completed', text: 'Đã thanh toán trực tiếp', icon: 'fa-money-bill-wave' };
+    } else {
+        paymentStatus = { class: 'status-pending', text: 'Thanh toán khi nhận dịch vụ', icon: 'fa-money-bill-wave' };
+    }
+} else {
+    paymentStatus = { class: 'status-unknown', text: 'Không xác định', icon: 'fa-question-circle' };
+}
+
+document.getElementById('payment-status-badge').innerHTML = `<i class="fas ${paymentStatus.icon}"></i> ${paymentStatus.text}`;
+document.getElementById('payment-status-badge').className = `status-badge ${paymentStatus.class}`;
+
+                // Render ngày tạo (Đặt ngày)
+                document.getElementById('created-at').textContent = formatDate(order.createdAt || order.thoiGianDat);
+
+                // Render dịch vụ
+                const service = order.service;
+                document.getElementById('service-title').textContent = service.tenDichVu;
+                document.getElementById('service-image').src = service.imageURL || '/assets/images/service-default.jpg';
+                document.getElementById('service-image').alt = service.tenDichVu;
+                document.getElementById('service-category').textContent = service.category ? service.category.tenDanhMuc : 'Chưa phân loại';
+                document.getElementById('service-duration').textContent = service.thoiGianHoanThanh || 'N/A';
+                document.getElementById('service-price').textContent = new Intl.NumberFormat('vi-VN').format(service.giaCoBan) + ' đ';
+
+                // Render lịch hẹn (từ thoiGianDat)
+                const bookingDateTime = new Date(order.thoiGianDat);
+                document.getElementById('booking-date').textContent = formatDate(order.thoiGianDat);
+                document.getElementById('booking-time').textContent = formatTimeAMPM(order.thoiGianDat);
+
+                // Render thông tin khách hàng
+                const user = order.user;
+                document.getElementById('phone').textContent = order.sdt || 'Chưa cung cấp';
+                document.getElementById('address').textContent = order.diaChiDichVu || 'Chưa cung cấp';
+
+                // Render ghi chú
+                if (order.notes && order.notes.trim() !== '') {
+                    document.getElementById('notes-content').innerHTML = order.notes.replace(/\n/g, '<br>');
+                    document.getElementById('notes-section').style.display = 'block';
+                }
+                // Render timeline (đơn giản dựa trên trạng thái)
+                const timeline = document.getElementById('timeline');
+                timeline.innerHTML = `
+                    <div class="timeline-item">
+                        <div class="timeline-title">Đơn hàng được tạo</div>
+                        <div class="timeline-date">${formatDate(order.createdAt || order.thoiGianDat)}</div>
+                    </div>
+                `;
+                if (order.trangThai !== 'CHUA_XU_LY') {
+                    timeline.innerHTML += `
+                        <div class="timeline-item">
+                            <div class="timeline-title">Đã nhận đơn</div>
+                            <div class="timeline-date">${formatDate(order.updatedAt || order.thoiGianDat)}</div>
+                        </div>
+                    `;
+                }
+                if (order.trangThai === 'HOAN_THANH') {
+                    timeline.innerHTML += `
+                        <div class="timeline-item">
+                            <div class="timeline-title">Dịch vụ hoàn thành</div>
+                            <div class="timeline-date">${formatDate(order.completedAt || order.thoiGianDat)}</div>
+                        </div>
+                    `;
+                }
+
+                // Render tổng tiền
+                document.getElementById('total-price').innerHTML = `Tổng tiền: ${new Intl.NumberFormat('vi-VN').format(order.tongTien)} đ`;
+
+const actionExtra = document.getElementById('action-buttons-extra');
+actionExtra.innerHTML = ''; // Xóa trước
+
+// 1. Hủy đơn (chỉ khi CHUA_XU_LY và đã thanh toán online)
+if (
+    order.trangThai === 'CHUA_XU_LY' && 
+    (
+        (order.phuongThucThanhToan === 'CHUYEN_KHOAN' && order.paymentStatus === 'PAID') ||
+        order.phuongThucThanhToan === 'TIEN_MAT'
+    )
+) {
+    actionExtra.innerHTML += `
+        <a href="/cancel_booking.html?id=${order.id}" 
+           class="action-btn btn-danger" 
+           onclick="return confirm('Bạn có chắc chắn muốn hủy đơn hàng này?');">
+            <i class="fas fa-times"></i> Hủy đơn hàng
+        </a>
+    `;
+}
+
+// 2. Thanh toán online (chỉ khi CHUYEN_KHOAN + chưa thanh toán + chưa hoàn thành)
+if (order.phuongThucThanhToan === 'CHUYEN_KHOAN' && 
+    order.paymentStatus !== 'PAID' && 
+    !isCompleted && 
+    order.trangThai !== 'HUY') {
+    actionExtra.innerHTML += `
+        <a href="/payment.html?booking_id=${order.id}" class="action-btn btn-primary">
+            <i class="fas fa-credit-card"></i> Thanh toán online
+        </a>
+    `;
+}
+
+// қ 3. Đã thanh toán (hiển thị thông báo nếu đã xong)
+if ((order.phuongThucThanhToan === 'TIEN_MAT' && isCompleted) ||
+    (order.phuongThucThanhToan === 'CHUYEN_KHOAN' && order.paymentStatus === 'PAID') ||
+    isCompleted) {
+    
+    const isPaid = 
+    (order.phuongThucThanhToan === 'TIEN_MAT' && isCompleted) ||
+    (order.phuongThucThanhToan === 'CHUYEN_KHOAN' && order.paymentStatus === 'PAID');
+
+if (isPaid && actionExtra.innerHTML === '') {
+    actionExtra.innerHTML = `
+        <div class="status-completed" style="
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px; 
+            font-weight: 500;
+            border: 1px solid #4CAF50; 
+            border-radius: 7px;       
+            padding: 10px 12px;         
+            background-color: #E8F5E9;
+        ">
+            <i class="fas fa-check-circle"></i> 
+            ${order.phuongThucThanhToan === 'TIEN_MAT' ? 'Đã thanh toán trực tiếp' : 'Đã thanh toán online'}
+        </div>
+    `;
+}
+}
+            } catch (error) {
+                console.error('Lỗi khi tải chi tiết đơn hàng:', error);
+                document.querySelector('.booking-container').innerHTML = 
+                    '<p style="text-align: center; color: red;">Không tìm thấy đơn hàng hoặc lỗi tải dữ liệu. Vui lòng thử lại.</p>';
+            }
+        }
+
+        // Khởi tạo trang
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!bookingId) {
+                alert('Không có ID đơn hàng.');
+                window.location.href = '/my_bookings.html';
+                return;
+            }
+            loadBookingDetails();
+        });
+    </script>
+</body>
+</html>

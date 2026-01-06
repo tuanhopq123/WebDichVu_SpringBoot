@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cập nhật trạng thái đơn hàng</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
+        .header { background: #007bff; color: white; padding: 15px; text-align: center; border-radius: 8px 8px 0 0; }
+        .content { padding: 20px; }
+        .status { font-size: 1.2em; font-weight: bold; color: #007bff; }
+        .footer { text-align: center; margin-top: 30px; color: #666; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h2>Cập Nhật Trạng Thái Đơn Hàng</h2>
+    </div>
+    <div class="content">
+        <p>Xin chào <strong th:text="${user.hoTen}">Khách hàng</strong>,</p>
+        <p>Chúng tôi xin thông báo trạng thái đơn hàng của bạn đã được cập nhật:</p>
+
+        <p class="status" th:text="${statusText}">Đã Nhận</p>
+
+        <hr>
+        <p><strong>Mã đơn hàng:</strong> #<span
+                th:text="${order.id}">123</span></p>
+        <p><strong>Dịch vụ:</strong> <span th:text="${order.service?.tenDichVu}">Làm đẹp</span></p>
+        <p><strong>Thời gian:</strong> <span th:text="${#temporals.format(order.thoiGianDat, 'dd/MM/yyyy HH:mm')}">15/11/2025 10:00</span></p>
+        <p><strong>Địa chỉ:</strong> <span th:text="${order.diaChiDichVu}">123 ABC, Q1</span></p>
+
+        <p>Cảm ơn bạn đã sử dụng dịch vụ!</p>
+    </div>
+    <div class="footer">
+        <p>© 2025 DoAnChuyenNganh. All rights reserved.</p>
+    </div>
+</div>
+</body>
+</html>

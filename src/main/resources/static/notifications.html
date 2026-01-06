@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tất cả Thông báo - Dịch vụ Tại Nhà</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Icons&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="/css/style_index.css" rel="stylesheet">
+    <link href="/css/chatbot.css" rel="stylesheet">
+
+    <style>
+        .notifications-page-container { padding: 2rem 0; min-height: calc(100vh - 400px); }
+        .breadcrumb { display: flex; align-items: center; flex-wrap: wrap; background-color: #f9f9f9; padding: 0.75rem 1.5rem; border-radius: var(--rounded-md); margin-bottom: 2rem; font-size: 0.9rem; }
+        .breadcrumb a { color: var(--primary-color); text-decoration: none; display: inline-flex; align-items: center; gap: 5px; }
+        .breadcrumb span.separator { margin: 0 0.5rem; color: #999; }
+        .notifications-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--border-color); }
+        .notifications-header h2 { font-size: 2rem; font-weight: 700; color: var(--text-color); margin: 0; display: flex; align-items: center; gap: 10px; }
+        .notifications-list-wrapper { background-color: #fff; border-radius: var(--rounded-lg); box-shadow: var(--shadow-sm); overflow: hidden; border: 1px solid var(--border-color); }
+        .notification-item { display: flex; align-items: flex-start; gap: 1rem; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); text-decoration: none; color: inherit; transition: background-color 0.2s ease; }
+        .notification-item:last-child { border-bottom: none; }
+        .notification-item:hover { background-color: #fdfdfd; }
+        .notification-item.unread { background-color: var(--bg-light); font-weight: 500; }
+        .notification-item.unread .notification-content p { font-weight: 500; color: var(--text-color); }
+        .notification-icon-wrapper { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1rem; }
+        .notification-icon-wrapper.icon-booking { background-color: var(--primary-color); }
+        .notification-icon-wrapper.icon-success { background-color: var(--success-color); }
+        .notification-icon-wrapper.icon-cancel { background-color: var(--danger-color); }
+        .notification-icon-wrapper.icon-info { background-color: var(--info-color); }
+        .notification-icon-wrapper.icon-default { background-color: var(--text-light); }
+        .notification-content { flex-grow: 1; }
+        .notification-content p { margin: 0 0 0.25rem 0; line-height: 1.5; color: var(--text-light); font-weight: 400; }
+        .notification-time { font-size: 0.85rem; color: #888; }
+        .notification-status { text-align: center; padding: 3rem 1rem; color: var(--text-light); }
+        .notification-status i { font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary-color); }
+
+        /* --- CSS PHÂN TRANG --- */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 2rem;
+            padding-bottom: 2rem;
+        }
+        .page-btn {
+            padding: 8px 14px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            color: #333;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .page-btn:hover:not(:disabled) {
+            background-color: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+        .page-btn.active {
+            background-color: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container header-container">
+            <a href="/home.html" class="logo">
+                <img src="/assets/logo/Ho_Anh_Tuan.png" alt="Logo" style="height: 50px; border-radius: 17px;">
+                <span class="logo-text">Dịch vụ Tại Nhà</span>
+            </a>
+            <nav class="main-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="/home.html" class="nav-link">Trang chủ</a></li>
+                    <li class="nav-item"><a href="/introduce.html" class="nav-link">Giới thiệu</a></li>
+                    <li class="nav-item"><a href="/services.html" class="nav-link">Dịch vụ</a></li>
+                    <li class="nav-item"><a href="/service_price_list.html" class="nav-link">Bảng giá</a></li>
+                    <li class="nav-item"><a href="/contact.html" class="nav-link">Liên hệ</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <div id="auth-section"></div>
+                <button class="hamburger" aria-label="Menu">
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container notifications-page-container">
+            <div class="breadcrumb">
+                <a href="/home.html"><i class="fas fa-home"></i> Trang chủ</a>
+                <span class="separator"><i class="fas fa-angle-right"></i></span>
+                <span>Thông báo</span>
+            </div>
+
+            <div class="notifications-header">
+                <h2><i class="fas fa-bell"></i> Tất cả thông báo</h2>
+                <button id="mark-all-read-btn" class="btn btn-outline" disabled>
+                    <i class="fas fa-check-double"></i> Đánh dấu tất cả đã đọc
+                </button>
+            </div>
+
+            <div class="notifications-list-wrapper" id="notification-list-full">
+                <div class="notification-status" id="notifications-loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Đang tải thông báo của bạn...</p>
+                </div>
+                <div class="notification-status" id="notifications-empty" style="display: none;">
+                    <i class="fas fa-bell-slash"></i>
+                    <p>Bạn không có thông báo nào.</p>
+                </div>
+                </div>
+
+            <div id="pagination-controls" class="pagination-container" style="display: none;"></div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-widget about-widget">
+                        <a href="/index.html" class="footer-logo">
+                            <img src="/assets/logo/Ho_Anh_Tuan.png" alt="Logo">
+                            <span>Dịch vụ Tại Nhà</span>
+                        </a>
+                        <p>Cung cấp các dịch vụ tại nhà chất lượng cao, uy tín và chuyên nghiệp.</p>
+                         <div class="social-links">
+                            <a href="https://www.facebook.com/ten.trang.cua.ban" target="_blank" class="social-link facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/ten_instagram" target="_blank" class="social-link instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.tiktok.com/@ten_tiktok" target="_blank" class="social-link tiktok"><i class="fab fa-tiktok"></i></a>
+                            <a href="https://www.youtube.com/channel/ma_kenh_cua_ban" target="_blank" class="social-link youtube"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-widget">
+                        <h3 class="widget-title">Điều hướng</h3>
+                        <ul class="widget-links">
+                            <li><a href="/index.html">Trang chủ</a></li>
+                            <li><a href="/introduce.html">Giới thiệu</a></li>
+                            <li><a href="/services.html">Dịch vụ</a></li>
+                            <li><a href="/service_price_list.html">Bảng giá</a></li>
+                            <li><a href="/contact.html">Liên hệ</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-widget">
+                         <h3 class="widget-title">Dịch vụ</h3>
+                         <ul class="widget-links" id="footer-services"></ul>
+                    </div>
+                    <div class="footer-widget">
+                        <h3 class="widget-title">Hỗ trợ</h3>
+                        <ul class="widget-links">
+                            <li><a href="/terms.html">Điều khoản sử dụng</a></li>
+                            <li><a href="/privacy.html">Chính sách bảo mật</a></li>
+                            <li><a href="/faq.html">Câu hỏi thường gặp</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 Dịch vụ Tại Nhà. All rights reserved. Thiết kế bởi Hồ Anh Tuấn</p>
+            </div>
+        </div>
+    </footer>
+
+    <button id="backToTop" class="back-to-top"><i class="fas fa-chevron-up"></i></button>
+
+    <div class="chat-support">
+        <div class="chat-icon" id="chatIcon"><i class="fas fa-comments"></i><span class="chat-notification" style="display: none;"></span></div>
+        <div class="chat-box" id="chatBox"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="/js/chatbot.js"></script>
+    <script src="/js/notification.js"></script>
+
+    <script>
+    // --- BIẾN TOÀN CỤC ---
+    let currentToken = null;
+    let currentPage = 0;
+    const pageSize = 10; 
+    let totalPages = 0;
+
+    // --- UTILS ---
+    function truncateText(text, maxWords) {
+        if (!text) return '';
+        const words = text.trim().split(/\s+/);
+        return words.length > maxWords ? words.slice(0, maxWords).join(' ') + '...' : text;
+    }
+
+    function getIconForType(type) {
+        switch (type) {
+            case 'ORDER': return { class: 'fa-solid fa-calendar-check', theme: 'icon-booking' };
+            case 'PROMOTION': return { class: 'fa-solid fa-percent', theme: 'icon-success' };
+            default: return { class: 'fa-solid fa-bell', theme: 'icon-default' };
+        }
+    }
+
+    function formatTimeAgo(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        const now = new Date();
+        const seconds = Math.round((now - date) / 1000);
+        const minutes = Math.round(seconds / 60);
+        const hours = Math.round(minutes / 60);
+        const days = Math.round(hours / 24);
+        if (seconds < 60) return 'Vừa xong';
+        if (minutes < 60) return `${minutes} phút trước`;
+        if (hours < 24) return `${hours} giờ trước`;
+        return `${days} ngày trước`;
+    }
+
+    // --- LOAD DATA ---
+    function loadAuthSection() {
+        const token = localStorage.getItem('jwtToken');
+        if (token) {
+            currentToken = token;
+            fetch('/api/users/me', { headers: { 'Authorization': `Bearer ${token}` } })
+            .then(res => {
+                if (!res.ok) throw new Error('Auth failed');
+                return res.json();
+            })
+            .then(user => {
+                renderHeader(user);
+                loadNotificationsPage(0); // Tải trang đầu tiên
+            })
+            .catch(() => handleLogout());
+        } else {
+            handleLogout();
+        }
+    }
+
+    function renderHeader(user) {
+        const authSection = document.getElementById('auth-section');
+        const avatar = user.avatarURL || '/assets/avatar/default-avatar.png';
+        authSection.innerHTML = `
+            <div class="header-actions">
+                <div class="notification-container">
+                    <div class="notification-icon"><i class="fas fa-bell"></i><span class="notification-badge" style="display: none;"></span></div>
+                    <div class="notification-dropdown">
+                        <div class="notification-header"><h3>Thông báo</h3><button id="mark-all-pop" class="mark-all-read">Đã đọc</button></div>
+                        <div class="notification-list" id="notification-list"></div>
+                        <div class="notification-footer"><a href="/notifications.html">Xem tất cả</a></div>
+                    </div>
+                </div>
+                <div class="user-menu-container">
+                     <div class="user-menu-trigger"><img src="${avatar}" alt="Avatar" class="user-avatar"><span class="user-name">${user.hoTen}</span><i class="fas fa-chevron-down"></i></div>
+                     <div class="user-dropdown">
+                        <a href="/account.html" class="user-dropdown-item"><i class="fas fa-user"></i> Hồ sơ cá nhân</a>
+                        <a href="/my_bookings.html" class="user-dropdown-item"><i class="fas fa-calendar-check"></i> Đơn đặt dịch vụ</a>
+                        <a href="/cart.html" class="user-dropdown-item"><i class="fas fa-shopping-cart"></i> Giỏ hàng của tôi</a>
+                        <a href="/change_password.html" class="user-dropdown-item"><i class="fas fa-key"></i> Đổi mật khẩu</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="user-dropdown-item logout" onclick="logout(event)"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                    </div>
+                </div>
+            </div>`;
+        
+        if (typeof updateBadgeCount === 'function') updateBadgeCount(localStorage.getItem('unreadNotificationCount') || 0);
+        if (typeof loadNotifications === 'function') loadNotifications(currentToken);
+        if (typeof setupNotificationClick === 'function') setupNotificationClick();
+    }
+
+    function handleLogout() {
+        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('userRole');
+        if (window.location.pathname.includes('/notifications.html')) {
+            window.location.href = '/login.html?redirect=notifications';
+        }
+    }
+    function logout(e) { e.preventDefault(); handleLogout(); }
+
+    function loadFooterServices() {
+        fetch('/api/services?page=0&size=5').then(r=>r.json()).then(d=>{
+            const el = document.getElementById('footer-services');
+            if(el) el.innerHTML = (d.content||[]).map(s=>`<li><a href="/service_detail.html?id=${s.id}">${truncateText(s.tenDichVu,4)}</a></li>`).join('');
+        });
+    }
+
+    // --- LOGIC PHÂN TRANG (ĐÃ SỬA ĐỂ BẮT LỖI) ---
+    async function loadNotificationsPage(page) {
+        if (!currentToken) return;
+        
+        const listContainer = document.getElementById('notification-list-full');
+        const loadingEl = document.getElementById('notifications-loading');
+        const emptyEl = document.getElementById('notifications-empty');
+        const markAllBtn = document.getElementById('mark-all-read-btn');
+        const paginationEl = document.getElementById('pagination-controls');
+        
+        loadingEl.style.display = 'block';
+        // Xóa nội dung cũ
+        Array.from(listContainer.children).forEach(child => {
+            if (child.id !== 'notifications-loading' && child.id !== 'notifications-empty') {
+                child.remove();
+            }
+        });
+
+        try {
+            const response = await fetch(`/api/notifications?page=${page}&size=${pageSize}`, {
+                headers: { 'Authorization': `Bearer ${currentToken}` }
+            });
+            
+            if (!response.ok) throw new Error('API Error');
+            
+            const data = await response.json();
+            console.log("Dữ liệu từ server:", data); // Debug log
+
+            let notifications = [];
+            
+            // --- LOGIC THÔNG MINH: Kiểm tra kiểu dữ liệu trả về ---
+            if (data.content) {
+                // Trường hợp 1: Backend trả về Page chuẩn (Đúng)
+                notifications = data.content;
+                totalPages = data.totalPages;
+                currentPage = data.number;
+                paginationEl.style.display = 'flex'; // Hiện phân trang
+            } else if (Array.isArray(data)) {
+                // Trường hợp 2: Backend trả về List cũ (Chưa update server)
+                console.warn("Backend đang trả về List, chưa hỗ trợ phân trang");
+                notifications = data;
+                totalPages = 1;
+                currentPage = 0;
+                paginationEl.style.display = 'none'; // Ẩn phân trang đi
+            } else {
+                notifications = [];
+            }
+
+            loadingEl.style.display = 'none';
+
+            if (notifications.length === 0) {
+                emptyEl.style.display = 'block';
+                markAllBtn.disabled = true;
+                paginationEl.style.display = 'none';
+                return;
+            }
+
+            emptyEl.style.display = 'none';
+            let hasUnread = false;
+
+            const html = notifications.map(noti => {
+                const icon = getIconForType(noti.type);
+                const timeAgo = formatTimeAgo(noti.createdAt);
+                const isRead = (noti.read !== undefined) ? noti.read : noti.isRead;
+                if (!isRead) hasUnread = true;
+
+                return `
+                <a href="${noti.link || '#'}" class="notification-item ${!isRead ? 'unread' : ''}" data-id="${noti.id}">
+                    <div class="notification-icon-wrapper ${icon.theme}"><i class="${icon.class}"></i></div>
+                    <div class="notification-content">
+                        <p>${noti.message}</p>
+                        <span class="notification-time">${timeAgo}</span>
+                    </div>
+                </a>`;
+            }).join('');
+
+            listContainer.insertAdjacentHTML('beforeend', html);
+            markAllBtn.disabled = !hasUnread;
+            
+            setupItemClickListeners();
+            if (data.content) {
+                renderPagination(totalPages, currentPage);
+            }
+
+        } catch (e) {
+            console.error(e);
+            loadingEl.innerHTML = '<p style="color:red">Lỗi tải dữ liệu. Hãy thử F5 hoặc kiểm tra Backend.</p>';
+        }
+    }
+
+    function renderPagination(total, current) {
+        const container = document.getElementById('pagination-controls');
+        if (total <= 1) {
+            container.style.display = 'none';
+            return;
+        }
+        
+        let html = '';
+        // Nút Trước
+        html += `<button class="page-btn" ${current === 0 ? 'disabled' : ''} onclick="changePage(${current - 1})">Trước</button>`;
+        
+        // Các trang số
+        for (let i = 0; i < total; i++) {
+            if (i === 0 || i === total - 1 || (i >= current - 2 && i <= current + 2)) {
+                html += `<button class="page-btn ${i === current ? 'active' : ''}" onclick="changePage(${i})">${i + 1}</button>`;
+            } else if (i === current - 3 || i === current + 3) {
+                html += `<span style="padding: 5px;">...</span>`;
+            }
+        }
+
+        // Nút Sau
+        html += `<button class="page-btn" ${current === total - 1 ? 'disabled' : ''} onclick="changePage(${current + 1})">Tiếp</button>`;
+        container.innerHTML = html;
+    }
+
+    window.changePage = function(page) {
+        if (page >= 0 && page < totalPages) {
+            loadNotificationsPage(page);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    function setupItemClickListeners() {
+        document.querySelectorAll('.notification-item.unread').forEach(item => {
+            item.addEventListener('click', async () => {
+                const id = item.dataset.id;
+                if(id && currentToken) {
+                    await fetch(`/api/notifications/${id}/read`, {
+                        method: 'POST', headers: { 'Authorization': `Bearer ${currentToken}` }
+                    });
+                    item.classList.remove('unread');
+                    if (typeof decrementBadgeCount === 'function') decrementBadgeCount();
+                }
+            });
+        });
+    }
+    
+    document.getElementById('mark-all-read-btn').addEventListener('click', async () => {
+        if(!currentToken) return;
+        const btn = document.getElementById('mark-all-read-btn');
+        btn.disabled = true;
+        try {
+            await fetch('/api/notifications/read-all', {
+                method: 'POST', headers: { 'Authorization': `Bearer ${currentToken}` }
+            });
+            document.querySelectorAll('.notification-item.unread').forEach(i => i.classList.remove('unread'));
+            if (typeof resetBadgeCount === 'function') resetBadgeCount();
+            btn.innerHTML = '<i class="fas fa-check-double"></i> Đã đánh dấu tất cả';
+        } catch(e) { console.error(e); btn.disabled = false; }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadAuthSection();
+        loadFooterServices();
+        if (typeof initChatbot === 'function') initChatbot();
+    });
+</script>
+</body>
+</html>

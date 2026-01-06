@@ -1,0 +1,143 @@
+<div class="dashboard-grid">
+    <h2>Tổng Quan Hệ Thống</h2>
+
+    <!-- Ô số lượng người dùng -->
+    <div class="stat-card">
+        <h3>Tổng Người Dùng</h3>
+        <p class="value" id="total-users">0</p>
+    </div>
+
+    <!-- Bộ lọc thời gian -->
+    <div class="filter-group">
+        <select id="filter-type">
+            <option value="day">Theo Ngày</option>
+            <option value="month">Theo Tháng</option>
+            <option value="year">Theo Năm</option>
+        </select>
+        <input type="date" id="filter-date" />
+        <input type="month" id="filter-month" style="display:none;" />
+        <input type="number" id="filter-year" min="2020" max="2030" placeholder="Năm" style="display:none;" />
+        <button id="apply-filter">Áp dụng</button>
+    </div>
+
+<div class="chart-container">
+    <canvas id="revenueChart"></canvas>
+</div>
+
+    <!-- Biểu đồ tròn: Top dịch vụ -->
+    <div class="chart-container">
+        <canvas id="topServicesChart"></canvas>
+    </div>
+</div>
+
+<style>
+/* 1. Giới hạn chiều cao dashboard */
+.dashboard-grid {
+        padding: 20px; 
+        font-family: 'Montserrat', sans-serif;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        box-sizing: border-box; 
+        /* XÓA max-height và overflow-y */
+}
+
+    /* 2. Scroll mượt */
+    .dashboard-grid::-webkit-scrollbar {
+        width: 8px;
+    }
+    .dashboard-grid::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    .dashboard-grid::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 10px;
+    }
+    .dashboard-grid::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
+    /* 3. Đảm bảo canvas Chart.js không bị méo */
+    .chart-container {
+        position: relative;
+        height: 400px !important;
+        width: 100%;
+    }
+    .chart-container canvas {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        width: 100% !important;
+        height: 100% !important;
+    }
+    .stat-card {
+        background: #fff; 
+        padding: 20px; 
+        border-radius: 12px; 
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        text-align: center; 
+        flex: 1; 
+        min-width: 200px;
+    }
+    .stat-card h3 { 
+        margin: 0 0 10px; 
+        color: #333; 
+        font-size: 1rem; 
+    }
+    .stat-card .value { 
+        font-size: 2rem; 
+        font-weight: 700; 
+        color: #007bff; 
+    }
+
+    .chart-container {
+        background: #fff; 
+        padding: 20px; 
+        border-radius: 12px; 
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        height: 400px;
+    }
+    .filter-group {
+        display: flex; 
+        gap: 10px; 
+        margin-bottom: 20px; 
+        flex-wrap: wrap; 
+        align-items: center;
+    }
+    .filter-group select, 
+    .filter-group input {
+        padding: 10px; 
+        border: 1px solid #ddd; 
+        border-radius: 8px; 
+        font-size: 0.95rem;
+    }
+    .filter-group button {
+        padding: 10px 20px; 
+        background: #007bff; 
+        color: white; 
+        border: none;
+        border-radius: 8px; 
+        cursor: pointer;
+        font-weight: 600;
+    }
+    .filter-group button:hover { 
+        background: #0056b3; 
+    }
+    .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px; /* Tạo khoảng cách với biểu đồ */
+}
+
+.chart-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.chart-total {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #007bff; /* Giống màu của stat-card */
+}
+</style>

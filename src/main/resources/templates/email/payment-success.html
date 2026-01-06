@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Thanh toán thành công</title>
+  <style>
+    /* Giống order-confirmation, chỉ đổi màu và nội dung */
+    .header { background: #27ae60; }
+    .order-id { color: #27ae60; }
+    .status-paid { background: #d4edda; color: #155724; }
+    .price { color: #27ae60; }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="https://raw.githubusercontent.com/tuanhopq123/email-assets/refs/heads/main/Ho_Anh_Tuan.png" alt="Logo">
+      <h2>Thanh toán thành công!</h2>
+    </div>
+    <div class="content">
+      <p>Xin chào <strong th:text="${user.hoTen}"></strong>,</p>
+      <p>Chúng tôi đã nhận được thanh toán cho đơn hàng của bạn. Dịch vụ sẽ được thực hiện đúng lịch!</p>
+
+      <p class="order-id">Mã đơn hàng: #<span th:text="${order.id}"></span></p>
+
+      <table>
+        <tr><th>Dịch vụ</th><td th:text="${order.service.tenDichVu}"></td></tr>
+        <tr><th>Thời gian</th><td th:text="${#temporals.format(order.thoiGianDat, 'dd/MM/yyyy HH:mm')}"></td></tr>
+        <tr><th>Tổng tiền</th><td class="price" th:text="${#numbers.formatInteger(order.tongTien, 0, 'COMMA')} + 'đ'"></td></tr>
+        <tr>
+          <th>Trạng thái</th>
+          <td><span class="status status-paid">Đã thanh toán!</span></td>
+        </tr>
+      </table>
+
+      <p>Nhân viên sẽ đến đúng giờ. Vui lòng giữ điện thoại để nhận thông báo.</p>
+
+      <div style="text-align: center;">
+        <a href="https://yourdomain.com/my_bookings.html" class="btn">Xem đơn hàng</a>
+      </div>
+
+      <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+
+      <p><strong>Cảm ơn bạn đã tin tưởng Dịch Vụ Tại Nhà!</strong><br>
+      Đội ngũ hỗ trợ luôn sẵn sàng: <strong>0783 998 046</strong></p>
+    </div>
+    <div class="footer">
+      <p>© 2025 Dịch Vụ Tại Nhà</p>
+    </div>
+  </div>
+</body>
+</html>

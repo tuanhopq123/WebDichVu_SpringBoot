@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Xác nhận đặt lịch dịch vụ</title>
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #f7f9fc; color: #333; line-height: 1.6; }
+    .container { max-width: 600px; margin: 20px auto; background: #fff; border-radius:  12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    .header { background: #4a6cf7; color: white; padding: 20px; text-align: center; }
+    .header img { height: 50px; border-radius: 12px; }
+    .content { padding: 30px; }
+    .order-id { font-size: 1.4em; font-weight: 600; color: #4a6cf7; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f8f9ff; color: #4a6cf7; font-weight: 600; }
+    .price { font-weight: 600; color: #e74c3c; font-size: 1.2em; }
+    .status { padding: 6px 12px; border-radius: 6px; font-size: 0.9em; font-weight: 500; }
+    .status-pending { background: #fff3cd; color: #856404; }
+    .status-cash { background: #d4edda; color: #155724; }
+    .footer { background: #f8f9ff; padding: 20px; text-align: center; font-size: 0.9em; color: #777; }
+    .btn { display: inline-block; padding: 12px 24px; background: #4a6cf7; color: white; text-decoration: none; border-radius: 8px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="https://raw.githubusercontent.com/tuanhopq123/email-assets/refs/heads/main/Ho_Anh_Tuan.png" alt="Logo">
+      <h2>Xác nhận đặt lịch dịch vụ</h2>
+    </div>
+    <div class="content">
+      <p>Xin chào <strong th:text="${user.hoTen}"></strong>,</p>
+      <p>Cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của chúng tôi! Dưới đây là chi tiết đơn đặt lịch:</p>
+
+      <p class="order-id">Mã đơn hàng: #<span th:text="${order.id}"></span></p>
+
+      <table>
+        <tr><th>Dịch vụ</th><td th:text="${order.service.tenDichVu}"></td></tr>
+        <tr><th>Thời gian</th><td th:text="${#temporals.format(order.thoiGianDat, 'dd/MM/yyyy HH:mm')}"></td></tr>
+        <tr><th>Địa chỉ</th><td th:text="${order.diaChiDichVu}"></td></tr>
+        <tr><th>Số điện thoại</th><td th:text="${order.sdt}"></td></tr>
+        <tr><th>Ghi chú</th><td th:text="${order.notes ?: 'Không có'}"></td></tr>
+        <tr><th>Tổng tiền</th><td class="price" th:text="${#numbers.formatInteger(order.tongTien, 0, 'COMMA')} + 'đ'"></td></tr>
+        <tr>
+          <th>Phương thức thanh toán</th>
+          <td>
+            <span class="status" th:classappend="${
+              order.phuongThucThanhToan == T(com.example.DoAnChuyenNganh.entity.Order$PaymentMethod).TIEN_MAT 
+                ? 'status-cash' : 'status-pending'
+            }">
+              <span th:text="${
+                order.phuongThucThanhToan == T(com.example.DoAnChuyenNganh.entity.Order$PaymentMethod).TIEN_MAT 
+                  ? 'Thanh toán trực tiếp (Tiền mặt)' 
+                  : 'Đang chờ thanh toán!'
+              }"></span>
+            </span>
+          </td>
+        </tr>
+      </table>
+
+      <p>Chúng tôi sẽ liên hệ xác nhận trong vòng <strong>30 phút</strong>. Nếu bạn chọn <strong>thanh toán online</strong>, vui lòng hoàn tất chuyển khoản trong <strong>30 phút</strong> để giữ lịch.</p>
+
+      <div style="text-align: center;">
+        <a href="https://yourdomain.com/my_bookings.html" class="btn">Xem đơn hàng của tôi</a>
+https://yourdomain.com/my_bookings.html
+      </div>
+
+      <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+
+      <p><strong>Cảm ơn bạn đã chọn Dịch Vụ Tại Nhà!</strong><br>
+      Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7 qua hotline: <strong>0783 998 046</strong></p>
+    </div>
+    <div class="footer">
+      <p>© 2025 Dịch Vụ Tại Nhà. Tất cả quyền được bảo lưu.</p>
+    </div>
+  </div>
+</body>
+</html>

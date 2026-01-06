@@ -1,0 +1,265 @@
+<style>
+    .content-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    .content-header h2 {
+        margin: 0;
+        color: #4e73df;
+        font-weight: 700;
+        font-size: 1.8rem;
+    }
+
+    .filter-bar {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .filter-bar input[type="text"] {
+        flex: 1;
+        min-width: 280px;
+        padding: 11px 15px;
+        border: 1px solid #d1d3e2;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: border 0.3s;
+    }
+    .filter-bar input:focus {
+        outline: none;
+        border-color: #4e73df;
+        box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.1);
+    }
+    .filter-bar select {
+        padding: 11px 15px;
+        border: 1px solid #d1d3e2;
+        border-radius: 8px;
+        background: white;
+        font-size: 15px;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .data-table th {
+        background: linear-gradient(135deg, #4e73df, #224abe);
+        color: white;
+        padding: 16px 15px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 14px;
+    }
+    .data-table td {
+        padding: 14px 15px;
+        border-bottom: 1px solid #eee;
+    }
+    .data-table tbody tr:hover {
+        background-color: #f8f9fc !important;
+    }
+    .data-table tbody tr.unread {
+        background-color: #fff8e6 !important;
+        font-weight: 600;
+    }
+
+    .badge {
+        padding: 6px 12px;
+        border-radius: 50px;
+        font-size: 12.5px;
+        font-weight: 600;
+    }
+    .badge-warning { background: #ffc107; color: #856404; }
+    .badge-success { background: #d4edda; color: #155724; }
+
+    .btn {
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+    .btn-info {
+        background: linear-gradient(135deg, #17a2b8, #0d6efd);
+        color: white;
+        box-shadow: 0 3px 8px rgba(23,162,184,0.3);
+    }
+    .btn-info:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(23,162,184,0.4);
+    }
+    .btn-success-lift {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 50px;
+        box-shadow: 0 6px 15px rgba(40,167,69,0.4);
+        font-weight: 600;
+    }
+    .btn-success-lift:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(40,167,69,0.5);
+    }
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+
+    .pagination {
+        margin-top: 30px;
+        text-align: center;
+    }
+    #page-info {
+        margin: 0 25px;
+        font-weight: 700;
+        color: #4e73df;
+        font-size: 1.1rem;
+    }
+
+    /* MODAL SIÊU ĐẸP & CĂN GIỮA */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1050;
+        left: 0; top: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.6);
+        align-items: center;
+        justify-content: center;
+    }
+    .modal.show {
+        display: flex !important;
+    }
+    .modal-content {
+        background: white;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 850px;
+        max-height: 90vh;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        animation: modalShow 0.4s ease-out;
+    }
+    @keyframes modalShow {
+        from { opacity: 0; transform: scale(0.8); }
+        to { opacity: 1; transform: scale(1); }
+    }
+    .modal-header {
+        background: linear-gradient(135deg, #4e73df, #224abe);
+        color: white;
+        padding: 20px 30px;
+        font-size: 1.5rem;
+        font-weight: 600;
+        position: relative;
+    }
+    .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 25px;
+        font-size: 32px;
+        color: white;
+        opacity: 0.8;
+        cursor: pointer;
+        background: none;
+        border: none;
+    }
+    .close-btn:hover { opacity: 1;color: white; }
+    .modal-body {
+        padding: 30px;
+        max-height: 65vh;
+        overflow-y: auto;
+    }
+    #contact-info {
+        background: #f8f9fc;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 5px solid #4e73df;
+        margin-bottom: 25px;
+        line-height: 1.8;
+    }
+    #reply-text {
+        width: 100%;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        font-size: 15px;
+        resize: vertical;
+        min-height: 150px;
+    }
+</style>
+
+<div class="content-header">
+    <h2>Hỗ trợ khách hàng</h2>
+    <button class="btn btn-info-lift" id="refresh-contacts-btn">
+        Làm mới danh sách
+    </button>
+</div>
+
+<div class="filter-bar">
+    <input type="text" id="contact-search" placeholder="Tìm kiếm tên, email, nội dung...">
+    <select id="contact-filter">
+        <option value="all">Tất cả tin nhắn</option>
+        <option value="unread">Chưa đọc</option>
+        <option value="read">Đã đọc</option>
+        <option value="replied">Đã trả lời</option>
+    </select>
+</div>
+
+<div class="content-body">
+    <div class="table-container">
+        <table class="data-table" id="contacts-table">
+            <thead>
+                <tr>
+                    <th style="width:60px">#</th>
+                    <th>Thời gian</th>
+                    <th>Khách hàng</th>
+                    <th>Email</th>
+                    <th>Tiêu đề</th>                   
+                    <th style="text-align:center;">Trạng thái</th>
+                    <th style="width:100px">Hành động</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="pagination">
+        <button class="btn btn-secondary" id="prev-page" disabled>Trước</button>
+        <span id="page-info">Trang 1</span>
+        <button class="btn btn-secondary" id="next-page" disabled>Sau</button>
+    </div>
+</div>
+
+<!-- MODAL DUY NHẤT 1 THẺ – ĐÃ SỬA HOÀN CHỈNH -->
+<div class="modal" id="contact-modal" onclick="if(event.target===this) closeContactModal()">
+    <div class="modal-content">
+        <div class="modal-header">
+            Chi tiết tin nhắn & Trả lời
+            <button class="close-btn" onclick="closeContactModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div id="contact-info" style="background:#f8f9fc;padding:20px;border-radius:10px;margin-bottom:20px;line-height:1.8;"></div>
+            <hr style="margin:30px 0;border:none;border-top:2px dashed #ddd;">
+            <h4 style="color:#4e73df;margin-bottom:15px;">Soạn trả lời khách hàng</h4>
+            <textarea id="reply-text" rows="8" placeholder="Nhập nội dung trả lời sẽ được gửi qua email..." 
+                      style="width:100%;padding:15px;border:1px solid #ddd;border-radius:10px;font-size:15px;"></textarea>
+            <div style="text-align:right;margin-top:20px;">
+                <button class="btn btn-success-lift" onclick="sendReply()">
+                    Gửi phản hồi ngay
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

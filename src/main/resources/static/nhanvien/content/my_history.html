@@ -1,0 +1,47 @@
+<div class="content-header">
+    <h2><i class="fas fa-history"></i> Lịch sử công việc</h2>
+    <p>Xem lại tất cả các đơn hàng bạn đã tương tác.</p>
+</div>
+
+<div class="history-controls">
+    <div class="search-bar-container">
+        <i class="fas fa-search"></i>
+        <input type="text" id="history-search-input" placeholder="Tìm theo tên khách, dịch vụ, SĐT, email...">
+    </div>
+    
+    <div class="filter-group">
+        <select id="history-status-filter" class="form-select">
+            <option value="">Tất cả trạng thái</option>
+            <option value="ACCEPTED">Đã nhận (Đang làm)</option>
+            <option value="COMPLETED">Đã hoàn thành</option>
+            <option value="REJECTED">Đã từ chối</option>
+            <option value="PENDING">Đang chờ (Chưa xem)</option>
+        </select>
+        
+        <select id="history-sort-filter" class="form-select">
+            <option value="newest">Mới nhất (Mặc định)</option>
+            <option value="oldest">Cũ nhất</option>
+            <option value="az">Tên khách (A-Z)</option>
+            <option value="za">Tên khách (Z-A)</option>
+        </select>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="data-table history-table">
+        <thead>
+            <tr>
+                <th>Dịch vụ</th>
+                <th>Khách hàng</th>
+                <th>SĐT</th>
+                <th>Trạng thái (Lời mời)</th>
+                <th>Trạng thái (Đơn hàng)</th>
+                <th>Chi tiết</th> </tr>
+        </thead>
+        <tbody id="history-table-body">
+            </tbody>
+    </table>
+</div>
+
+<div class="pagination-container" id="history-pagination">
+    </div>

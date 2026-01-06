@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt Lịch Dịch Vụ | Dịch Vụ Tại Nhà</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style_booking.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container header-container">
+            <a href="/home.html" class="logo">
+                <img src="/assets/logo/Ho_Anh_Tuan.png" alt="Logo" style="height: 50px; border-radius: 17px;">
+                <span class="logo-text">Dịch Vụ Tại Nhà</span>
+            </a>
+            <nav class="main-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="/home.html" class="nav-link">Trang chủ</a></li>
+                    <li class="nav-item"><a href="/introduce.html" class="nav-link">Giới thiệu</a></li>
+                    <li class="nav-item"><a href="/services.html" class="nav-link active">Dịch vụ</a></li>
+                    <li class="nav-item"><a href="/service_price_list.html" class="nav-link">Bảng giá</a></li>
+                    <li class="nav-item"><a href="/contact.html" class="nav-link">Liên hệ</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">              
+                <div id="auth-section"></div>
+                <button class="hamburger" aria-label="Menu">
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Đường dẫn định hướng -->
+            <div class="breadcrumb">
+                <a href="/home.html"><i class="fas fa-home"></i> Trang chủ</a>
+                <span class="separator"><i class="fas fa-angle-right"></i></span>
+                <a href="/services.html">Dịch vụ</a>
+                <span class="separator"><i class="fas fa-angle-right"></i></span>
+                <a id="category-link" href="/services.html"></a>
+                <span class="separator"><i class="fas fa-angle-right"></i></span>
+                <span class="current-page" id="service-name"></span>
+            </div>
+
+            <div class="booking-container">
+                <div class="booking-header">
+                    <h2><i class="far fa-calendar-check"></i> Đặt lịch dịch vụ</h2>
+                    <p class="subtitle">Điền thông tin để đặt lịch dịch vụ <span id="service-title"></span></p>
+                </div>
+                <div class="booking-wrapper">
+                    <!-- Phần thông tin dịch vụ -->
+                    <div class="service-details">
+                        <div class="service-image">
+                            <img id="service-image" src="/assets/images/service-default.jpg" alt="Dịch vụ">
+                            <div class="service-badge">
+                                <i class="fas fa-check-circle"></i> Dịch vụ chính hãng
+                            </div>
+                        </div>
+                        <div class="service-summary">
+                            <h3 class="service-title" id="service-title-content"></h3>
+                            <div class="service-rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <span class="rating-text">4.5/5 (128 đánh giá)</span>
+                            </div>
+                            <div class="service-description" id="service-description"></div>
+                            <div class="service-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-tags"></i>
+                                    <span id="service-category"></span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="far fa-clock"></i>
+                                    <span id="service-duration"></span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-user-check"></i>
+                                    <span>Nhân viên chuyên nghiệp</span>
+                                </div>
+                            </div>
+                            <div class="service-price-card">
+                                <div class="price-label">Giá dịch vụ:</div>
+                                <div class="price-value" id="service-price"></div>
+                                <div class="price-note">Đã bao gồm thuế VAT</div>
+                            </div>
+                            <div class="service-guarantee">
+                                <div class="guarantee-item">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span>Bảo hành 30 ngày</span>
+                                </div>
+                                <div class="guarantee-item">
+                                    <i class="fas fa-hand-holding-usd"></i>
+                                    <span>Hoàn tiền nếu không hài lòng</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Phần form đặt lịch -->
+                    <div class="booking-form-container">
+                        <h3 class="booking-form-title"><i class="fas fa-calendar-alt"></i> Thông tin đặt lịch</h3>
+                        <div class="info-box">
+                            <p><i class="fas fa-info-circle"></i> Vui lòng chọn ngày và giờ phù hợp. Chúng tôi sẽ liên hệ xác nhận sau khi nhận được thông tin đặt lịch của bạn.</p>
+                        </div>
+                        <form action="/api/orders" method="POST" class="booking-form" id="bookingForm">
+    <div class="form-row">
+        <div class="form-group">
+            <label for="booking_date"><i class="far fa-calendar-alt"></i> Ngày đặt lịch:</label>
+            <div class="input-group">
+                <input type="date" id="booking_date" name="booking_date" required>
+                <div class="input-hint">Vui lòng đặt trước 5 ngày</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="booking_time"><i class="far fa-clock"></i> Giờ đặt lịch:</label>
+            <div class="input-group">
+                <input type="text" id="booking_time" name="booking_time" required placeholder="Chọn giờ">
+                <div class="input-hint">Giờ làm việc: 8:00 AM - 8:00 PM</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="fullname"><i class="fas fa-user"></i> Họ và tên:</label>
+            <input type="text" id="fullname" name="fullname" required>
+        </div>
+        <div class="form-group">
+            <label for="phone"><i class="fas fa-phone-alt"></i> Số điện thoại:</label>
+            <div class="input-group">
+                <input type="tel" id="phone" name="phone" required pattern="[0-9]{10,11}">
+                <div class="input-hint">VD: 0901234567</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group full-width">
+        <label for="address"><i class="fas fa-map-marker-alt"></i> Địa chỉ:</label>
+        <div class="address-input-wrapper">
+            <input id="address" name="address" type="text" required autocomplete="off" class="address-input">
+            <button type="button" class="location-btn" id="getCurrentLocation">
+                <i class="fas fa-location-arrow"></i>
+            </button>
+            <div id="suggestions" class="address-suggestions"></div>
+        </div>
+    </div>
+    <div class="form-group full-width">
+        <label for="notes"><i class="far fa-sticky-note"></i> Ghi chú:</label>
+        <textarea id="notes" name="notes" placeholder="Vui lòng cung cấp thêm thông tin hoặc yêu cầu đặc biệt (nếu có)" rows="3"></textarea>
+    </div>
+    <div class="form-group payment-method-group">
+        <label><i class="fas fa-credit-card"></i> Phương thức thanh toán:</label>
+        <div class="payment-options">
+            <div class="payment-option">
+                <input type="radio" id="payment_direct" name="payment_method" value="TIEN_MAT" checked>
+                <label for="payment_direct">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Thanh toán trực tiếp</span>
+                </label>
+            </div>
+            <div class="payment-option">
+                <input type="radio" id="payment_bank" name="payment_method" value="CHUYEN_KHOAN">
+                <label for="payment_bank">
+                    <i class="fas fa-university"></i>
+                    <span>Chuyển khoản ngân hàng</span>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group terms-group">
+        <input type="checkbox" id="agree_terms" name="agree_terms" required>
+        <label for="agree_terms">Tôi đã đọc và đồng ý với <a href="#" class="terms-link">điều khoản dịch vụ</a>
+            và <a href="#" class="terms-link">chính sách bảo mật</a></label>
+    </div>
+    <input type="hidden" id="service_id" name="service_id">
+    <input type="hidden" id="user_id" name="user_id">
+    <input type="hidden" id="tong_tien" name="tong_tien">
+    <input type="hidden" name="trang_thai" value="CHUA_XU_LY">
+    <button type="button" class="btn-add-cart" id="addToCartBtn" style="flex: 1; padding: 12px; background: #eef2f6; color: #333; border: 1px solid #ddd; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+        <i class="fas fa-cart-plus"></i> Thêm vào giỏ
+    </button>
+    <button type="submit" class="cta-btn" id="submitBooking">
+        <i class="fas fa-check-circle"></i> Xác nhận đặt lịch
+    </button>
+</form>
+                    </div>
+                </div>
+                <!-- Phần thông tin bổ sung -->
+                <div class="booking-extra-info">
+                    <div class="info-panel">
+                        <h4><i class="fas fa-shield-alt"></i> Cam kết của chúng tôi</h4>
+                        <ul class="service-benefits">
+                            <li><i class="fas fa-check"></i> Đội ngũ kỹ thuật viên chuyên nghiệp, giàu kinh nghiệm</li>
+                            <li><i class="fas fa-check"></i> Đúng giờ, đảm bảo chất lượng dịch vụ</li>
+                            <li><i class="fas fa-check"></i> Bảo hành dài hạn sau khi sử dụng dịch vụ</li>
+                            <li><i class="fas fa-check"></i> Giá cả hợp lý, minh bạch, không phát sinh chi phí</li>
+                        </ul>
+                    </div>
+                    <div class="info-panel">
+                        <h4><i class="fas fa-question-circle"></i> Câu hỏi thường gặp</h4>
+                        <div class="faq-accordion">
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <i class="fas fa-plus-circle"></i> Làm thế nào để hủy hoặc thay đổi lịch đặt?
+                                </div>
+                                <div class="faq-answer">
+                                    Bạn có thể hủy hoặc thay đổi lịch đặt bằng cách gọi hotline: 1900 xxxx hoặc qua tài khoản của bạn trên website. Vui lòng thông báo trước ít nhất 4 giờ để tránh phí hủy lịch.
+                                </div>
+                            </div>
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <i class="fas fa-plus-circle"></i> Tôi có cần chuẩn bị gì trước khi kỹ thuật viên đến không?
+                                </div>
+                                <div class="faq-answer">
+                                    Tùy thuộc vào loại dịch vụ, chúng tôi sẽ gửi thông tin chi tiết về những gì bạn cần chuẩn bị. Thông thường, bạn chỉ cần đảm bảo khu vực cần xử lý dễ tiếp cận.
+                                </div>
+                            </div>
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <i class="fas fa-plus-circle"></i> Dịch vụ có được bảo hành không?
+                                </div>
+                                <div class="faq-answer">
+                                    Có, tất cả các dịch vụ của chúng tôi đều được bảo hành từ 30-90 ngày tùy thuộc vào loại dịch vụ. Chi tiết bảo hành sẽ được ghi rõ trong hóa đơn sau khi hoàn thành.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <div class="footer-logo">
+                        <img src="/assets/logo/Ho_Anh_Tuan.png" alt="Logo" class="footer-logo-img">
+                        <span>Dịch Vụ Tại Nhà</span>
+                    </div>
+                    <p class="footer-desc">Cung cấp dịch vụ chất lượng cao tại nhà với đội ngũ chuyên nghiệp, tận tâm.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Liên kết nhanh</h4>
+                    <ul class="footer-links">
+                        <li><a href="/home.html">Trang chủ</a></li>
+                        <li><a href="/services.html">Dịch vụ</a></li>
+                        <li><a href="/introduce.html">Giới thiệu</a></li>
+                        <li><a href="/contact.html">Liên hệ</a></li>
+                        <li><a href="/terms.html">Điều khoản</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Dịch vụ nổi bật</h4>
+                    <ul class="footer-links" id="footer-services"></ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Thông tin liên hệ</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> 143 Linh Trung, Thủ Đức, Hồ Chí Minh</li>
+                        <li><i class="fas fa-phone-alt"></i> Hotline: 0783 998 046</li>
+                        <li><i class="fas fa-envelope"></i> Email: tuanhopq2019@gmail.com</li>
+                        <li><i class="far fa-clock"></i> Giờ làm việc: 8:00 - 20:00</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Dịch Vụ Tại Nhà. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Nút gọi hỗ trợ nổi -->
+    <div class="floating-contact">
+        <a href="tel:1900xxxx" class="phone-btn">
+            <i class="fas fa-phone-alt"></i>
+        </a>
+        <span class="contact-tooltip">Gọi ngay: 1900 xxxx</span>
+    </div>
+
+    <script src="/js/notification.js?v=1.2"></script>
+<script>
+    const truncateText = (text, maxWords) => {
+        if (!text) return 'Không có mô tả';
+        const words = text.trim().split(/\s+/);
+        return words.length > maxWords ? words.slice(0, maxWords).join(' ') + '...' : text;
+    };
+
+    // DOM Elements
+    const els = {
+        addressInput: document.getElementById("address"),
+        suggestionsBox: document.getElementById("suggestions"),
+        getLocationBtn: document.getElementById("getCurrentLocation"),
+        dateInput: document.getElementById("booking_date"),
+        timeInput: document.getElementById("booking_time"),
+        form: document.getElementById("bookingForm"),
+        submitBtn: document.getElementById("submitBooking")
+    };
+    
+    // Thiết lập ngày tối thiểu (+5 ngày)
+    const setupMinDate = () => {
+        const minDate = new Date();
+        minDate.setDate(minDate.getDate() + 5);
+        els.dateInput.setAttribute('min', minDate.toISOString().split('T')[0]);
+    };
+
+    flatpickr(els.timeInput, {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "h:i K",
+        minTime: "08:00",
+        maxTime: "20:00",
+        defaultDate: "10:00 AM",
+        minuteIncrement: 15
+    });
+
+    function loadAuthSection() {
+        const token = localStorage.getItem('jwtToken');
+        const authSection = document.getElementById('auth-section');
+
+        if (token) {
+            fetch('/api/users/me', { headers: { 'Authorization': `Bearer ${token}` } })
+            .then(res => {
+                if (!res.ok) throw new Error('Unauthorized');
+                return res.json();
+            })
+            .then(user => {
+                // Điền thông tin vào Header
+                const avatar = user.avatarURL || '/assets/avatar/default-avatar.png';
+                const displayName = user.hoTen || 'Người dùng';
+                authSection.innerHTML = `
+                      <div class="header-actions"> <div class="notification-container">
+                              <div class="notification-icon"><i class="fas fa-bell"></i><span class="notification-badge" style="display: none;"></span></div>
+                              <div class="notification-dropdown">
+                                  <div class="notification-header"><h3>Thông báo</h3><button class="mark-all-read">Đánh dấu đã đọc</button></div>
+                                  <div class="notification-list" id="notification-list"></div>
+                                  <div class="notification-footer"><a href="/notifications.html">Xem tất cả</a></div>
+                              </div>
+                          </div>
+                          <div class="user-menu-container">
+                              <div class="user-menu-trigger">
+                                  <img src="${avatar}" alt="Avatar" class="user-avatar">
+                                  <span class="user-name">${displayName}</span>
+                                  <i class="fas fa-chevron-down"></i>
+                              </div>
+                              <div class="user-dropdown">
+                                  <a href="/account.html" class="user-dropdown-item"><i class="fas fa-user"></i> Hồ sơ</a>
+                                  <a href="/my_bookings.html" class="user-dropdown-item"><i class="fas fa-calendar-check"></i> Đơn đặt</a>
+                                  <a href="/cart.html" class="user-dropdown-item"><i class="fas fa-shopping-cart"></i> Giỏ hàng của tôi</a>
+                                  <a href="/change_password.html" class="user-dropdown-item"><i class="fas fa-key"></i> Đổi mật khẩu</a>
+                                  <div class="dropdown-divider"></div>
+                                  <a href="#" class="user-dropdown-item logout" onclick="logout(event)"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                              </div>
+                          </div>
+                      </div>`;
+                
+                // Điền thông tin vào Form Đặt lịch
+                document.getElementById('fullname').value = user.hoTen || '';
+                document.getElementById('phone').value = user.sdt || '';
+                document.getElementById('address').value = user.diaChi || '';
+                document.getElementById('user_id').value = user.id;
+
+                // Load Notification Logic
+                const initialCount = localStorage.getItem('unreadNotificationCount') || 0;
+                if (typeof updateBadgeCount === 'function') updateBadgeCount(initialCount);
+                if (typeof loadNotifications === 'function') loadNotifications(token);
+                if (typeof setupNotificationClick === 'function') setupNotificationClick();
+            })
+            .catch(() => {
+                localStorage.removeItem('jwtToken');
+                window.location.href = '/login.html'; // Bắt buộc đăng nhập để đặt lịch
+            });
+        } else {
+            window.location.href = '/login.html';
+        }
+    }
+
+    function logout(event) {
+        event.preventDefault();
+        localStorage.removeItem('jwtToken');
+        window.location.href = '/login.html';
+    }
+    async function updateCartBadgeBooking() {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) return;
+        try {
+            const res = await fetch('/api/cart', { headers: { 'Authorization': `Bearer ${token}` } });
+            if (res.ok) {
+                const cart = await res.json();
+                const count = cart.cartItems ? cart.cartItems.length : 0;
+                const badge = document.getElementById('booking-cart-count');
+                if(badge) {
+                    badge.textContent = count;
+                    badge.style.display = count > 0 ? 'inline-block' : 'none';
+                }
+            }
+        } catch(e) {}
+    }
+
+    // Load Service
+    async function loadServiceDetails() {
+        const params = new URLSearchParams(window.location.search);
+        const serviceId = params.get('service_id');
+        const token = localStorage.getItem('jwtToken');
+
+        if (!token) {
+            window.location.href = '/login.html';
+            return;
+        }
+
+        try {
+            const res = await fetch(`/api/services/${serviceId}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (!res.ok) throw new Error('Service not found');
+            
+            const service = await res.json();
+            
+            // Binding dữ liệu nhanh gọn
+            document.getElementById('service-name').textContent = service.tenDichVu;
+            document.getElementById('service-title').textContent = service.tenDichVu;
+            document.getElementById('service-title-content').textContent = service.tenDichVu;
+            document.getElementById('service-image').src = service.imageURL || '/assets/images/service-default.jpg';
+            document.getElementById('service-description').innerHTML = service.moTa || '';
+            document.getElementById('service-category').textContent = service.category?.tenDanhMuc || 'Chưa phân loại';
+            document.getElementById('service-duration').textContent = `Thời gian: ${service.thoiGianHoanThanh || 0} phút`;
+            document.getElementById('service-price').textContent = new Intl.NumberFormat('vi-VN').format(service.giaCoBan) + ' đ';
+            
+            document.getElementById('service_id').value = service.id;
+            document.getElementById('tong_tien').value = service.giaCoBan;
+            
+        } catch (e) {
+            document.querySelector('.booking-container').innerHTML = '<p class="text-center text-danger">Lỗi tải dịch vụ.</p>';
+        }
+    }
+
+    // Load User
+    async function loadUserInfo() {
+        const token = localStorage.getItem('jwtToken');
+        try {
+            const res = await fetch('/api/users/me', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (!res.ok) throw new Error('Unauthorized');
+            const user = await res.json();
+            
+            document.getElementById('fullname').value = user.hoTen || '';
+            document.getElementById('phone').value = user.sdt || '';
+            document.getElementById('address').value = user.diaChi || '';
+            document.getElementById('user_id').value = user.id;
+        } catch (e) {
+            window.location.href = '/login.html';
+        }
+    }
+
+    let debounceTimer;
+    els.addressInput.addEventListener("input", (e) => {
+        clearTimeout(debounceTimer);
+        const query = e.target.value.trim();
+        if (query.length < 3) {
+            els.suggestionsBox.innerHTML = "";
+            return;
+        }
+        
+        debounceTimer = setTimeout(async () => {
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=5&countrycodes=vn`);
+                const data = await res.json();
+                
+                els.suggestionsBox.innerHTML = data.length 
+                    ? data.map(p => `<div class="suggestion-item" onclick="selectAddress('${p.display_name.replace(/'/g, "\\'")}')">${p.display_name}</div>`).join('')
+                    : '<div style="padding:10px;">Không tìm thấy kết quả</div>';
+            } catch (e) {}
+        }, 400); // Giảm xuống 400ms cho nhạy hơn
+    });
+
+    // Hàm global để gọi từ HTML string
+    window.selectAddress = (addr) => {
+        els.addressInput.value = addr;
+        els.suggestionsBox.innerHTML = "";
+    };
+
+    document.addEventListener("click", (e) => {
+        if (!els.addressInput.contains(e.target) && !els.suggestionsBox.contains(e.target)) {
+            els.suggestionsBox.innerHTML = "";
+        }
+    });
+
+    // Lấy vị trí hiện tại
+    els.getLocationBtn.addEventListener("click", () => {
+        if (!navigator.geolocation) return alert("Trình duyệt không hỗ trợ vị trí.");
+        
+        els.getLocationBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        
+        navigator.geolocation.getCurrentPosition(
+            async (pos) => {
+                try {
+                    const { latitude, longitude } = pos.coords;
+                    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`);
+                    const data = await res.json();
+                    if (data.display_name) els.addressInput.value = data.display_name;
+                } catch (e) {
+                    alert("Không lấy được địa chỉ.");
+                } finally {
+                    els.getLocationBtn.innerHTML = '<i class="fas fa-location-arrow"></i>';
+                }
+            },
+            () => {
+                alert("Không thể truy cập vị trí.");
+                els.getLocationBtn.innerHTML = '<i class="fas fa-location-arrow"></i>';
+            }
+        );
+    });
+
+    els.form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        // Disable nút ngay lập tức để tránh double-click
+        const originalBtnText = els.submitBtn.innerHTML;
+        els.submitBtn.disabled = true;
+        els.submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+
+        try {
+            const formData = new FormData(els.form);
+            
+            // Validate Ngày
+            const selectedDate = new Date(formData.get("booking_date"));
+            const minDate = new Date();
+            minDate.setDate(minDate.getDate() + 5);
+            minDate.setHours(0,0,0,0);
+            selectedDate.setHours(0,0,0,0);
+            
+            if (selectedDate < minDate) throw new Error("Vui lòng chọn ngày từ 5 ngày sau hôm nay.");
+
+            // Validate SĐT
+            const phone = document.getElementById("phone").value;
+            if (!/^(0[0-9]{9,10})$/.test(phone)) throw new Error("Số điện thoại không hợp lệ.");
+
+            // Xử lý Giờ (Convert 12h -> 24h)
+            const timeStr = els.timeInput.value;
+            const [time, modifier] = timeStr.split(' ');
+            let [hours, minutes] = time.split(':');
+            
+            if (hours === '12') hours = '00';
+            if (modifier === 'PM') hours = parseInt(hours, 10) + 12;
+            
+            // Check giờ làm việc (đề phòng hack input)
+            const hourInt = parseInt(hours);
+            if (hourInt < 8 || hourInt >= 20) throw new Error("Vui lòng đặt trong giờ làm việc (8h-20h)");
+
+            const formattedTime = `${hours.toString().padStart(2,'0')}:${minutes}`;
+
+            // Payload
+            const payload = {
+                userId: formData.get("user_id"),
+                serviceId: formData.get("service_id"),
+                thoiGianDat: `${formData.get("booking_date")}T${formattedTime}`,
+                diaChiDichVu: formData.get("address"),
+                tongTien: formData.get("tong_tien"),
+                phuongThucThanhToan: formData.get("payment_method"),
+                trangThai: formData.get("trang_thai"),
+                notes: formData.get("notes"),
+                sdt: phone
+            };
+
+            // Call API
+            const token = localStorage.getItem('jwtToken');
+            const res = await fetch('/api/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) throw new Error("Lỗi kết nối server.");
+            
+            const data = await res.json();
+            
+            // Chuyển hướng
+            const method = formData.get("payment_method");
+            window.location.href = method === 'TIEN_MAT' 
+                ? `/thank_you.html?booking_id=${data.id}`
+                : `/payment.html?order_id=${data.id}`;
+
+        } catch (err) {
+            alert(err.message);
+            // Chỉ enable lại nút khi có lỗi, còn thành công thì để im chờ chuyển trang
+            els.submitBtn.disabled = false;
+            els.submitBtn.innerHTML = originalBtnText;
+        }
+    });
+
+    document.getElementById('addToCartBtn').addEventListener('click', async function() {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) return;
+        const serviceId = document.getElementById('service_id').value;
+        const btn = this;
+        const originalContent = btn.innerHTML;
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ...';
+        try {
+            const res = await fetch('/api/cart/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ serviceId: serviceId })
+            });
+            if (res.ok) {
+                alert("Đã thêm vào giỏ!");
+                updateCartBadgeBooking();
+            } else {
+                const data = await res.json();
+                alert(data.error || "Lỗi thêm giỏ hàng");
+            }
+        } catch (e) {} 
+        finally { btn.disabled = false; btn.innerHTML = originalContent; }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setupMinDate();
+        loadServiceDetails();
+        loadUserInfo();
+        loadAuthSection();
+        
+        // Load Footer (nếu có hàm này ở script chung thì bỏ qua)
+        fetch('/api/services?page=0&size=5')
+            .then(r => r.json())
+            .then(data => {
+                const list = data.content || data;
+                const footerEl = document.getElementById('footer-services');
+                if(footerEl) footerEl.innerHTML = list.map(s => `<li><a href="/service_detail.html?id=${s.id}">${truncateText(s.tenDichVu, 4)}</a></li>`).join('');
+            }).catch(() => {});
+            
+        // Toggle FAQ
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => {
+                document.querySelectorAll('.faq-item.active').forEach(i => i !== item && i.classList.remove('active'));
+                item.classList.toggle('active');
+            });
+        });
+    });
+</script>
+</body>
+</html>

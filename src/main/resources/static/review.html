@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đánh giá Đơn hàng - Dịch vụ Tại Nhà</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Icons&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="/css/style_index.css" rel="stylesheet">
+    <link href="/css/style_booking_detail.css" rel="stylesheet">
+    <style>
+        /* CSS riêng cho trang đánh giá - Giống my_bookings */
+        .review-container {
+            padding: 40px 0;
+            min-height: calc(100vh - 250px);
+        }
+        .review-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+        }
+        .review-header h2 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .review-header h2 i {
+            color: var(--secondary-color);
+            font-size: 1.2em;
+        }
+        .review-form-wrapper {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: var(--text-color);
+            margin-bottom: 8px;
+        }
+        .form-group p {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--text-color);
+        }
+        /* Rating stars - Tùy chỉnh để giống style */
+        .star-rating {
+            display: flex;
+            justify-content: flex-start;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        .star {
+            font-size: 1.5em;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .star:hover,
+        .star.active {
+            color: #ffc107;
+        }
+        .star.selected {
+            color: #ffc107;
+        }
+        /* Textarea giống input trong my_bookings */
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--rounded-md);
+            resize: vertical;
+            min-height: 120px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        .form-group textarea:focus {
+            border-color: var(--primary-color);
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25);
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: var(--rounded-md);
+            font-size: 1.1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .submit-btn:hover:not(:disabled) {
+            background-color: var(--primary-dark);
+        }
+        .submit-btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .loading-message {
+            text-align: center;
+            padding: 30px;
+        }
+        .loading-message i {
+            font-size: 2x;
+            color: var(--primary-color);
+        }
+        .error-message {
+            text-align: center;
+            color: #dc3545;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+            margin-top: 30px;
+        }
+        .error-message i {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-color);
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-weight: 500;
+            padding: 10px 0;
+        }
+        .back-link:hover {
+            color: var(--primary-dark);
+        }
+        .error-text {
+            color: #dc3545;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
+        }
+        /* Giữ nguyên CSS Alert Box từ my_bookings */
+        .alert {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1050;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+            border-radius: .375rem;
+            width: auto;
+            max-width: 90%;
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+            display: flex;
+            align-items: center;
+        }
+        .alert-content { flex-grow: 1; display: flex; align-items: center; gap: 0.75rem; }
+        .alert-content i { font-size: 1.25rem; }
+        .close-alert { background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 0 0 0 1.5rem; color: inherit; opacity: 0.7; }
+        .close-alert:hover { opacity: 1; }
+        .success-alert { color: #0f5132; background-color: #d1e7dd; border-color: #badbcc; }
+        .error-alert { color: #842029; background-color: #f8d7da; border-color: #f5c2c7; }
+        .info-alert { color: #055160; background-color: #cff4fc; border-color: #b6effb; }
+        .success-alert i.fa-check-circle { color: #0f5132; }
+        .error-alert i.fa-exclamation-triangle { color: #842029; }
+        .info-alert i.fa-info-circle { color: #055160; }
+    </style>
+</head>
+<body>
+    <div id="success-alert" class="alert" style="display: none;">
+        <div class="alert-content">
+            <i class="fas fa-info-circle"></i> <span id="success-message"></span>
+        </div>
+        <button class="close-alert"><i class="fas fa-times"></i></button>
+    </div>
+    <header class="main-header">
+        <div class="container header-container">
+            <a href="/home.html" class="logo">
+                <img src="/assets/logo/Ho_Anh_Tuan.png" alt="Logo" style="height: 50px; border-radius: 17px;">
+                <span class="logo-text">Dịch vụ Tại Nhà</span>
+            </a>
+            <nav class="main-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="/home.html" class="nav-link">Trang chủ</a></li>
+                    <li class="nav-item"><a href="/introduce.html" class="nav-link">Giới thiệu</a></li>
+                    <li class="nav-item"><a href="/services.html" class="nav-link">Dịch vụ</a></li>
+                    <li class="nav-item"><a href="/service_price_list.html" class="nav-link">Bảng giá</a></li>
+                    <li class="nav-item"><a href="/contact.html" class="nav-link">Liên hệ</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <div id="auth-section"> </div>
+                <button class="hamburger" aria-label="Menu">
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="container review-container">
+            <div class="breadcrumb">
+                <a href="/home.html"><i class="fas fa-home"></i> Trang chủ</a>
+                <span class="separator"><i class="fas fa-angle-right"></i></span>
+                <a href="/my_bookings.html">Lịch sử Đặt lịch</a>
+                <span class="separator"><i class="fas fa-angle-right"></i></span>
+                <span>Đánh giá đơn hàng</span>
+            </div>
+            <div class="review-header">
+                <h2><i class="fas fa-star"></i> Đánh giá đơn hàng</h2>
+                <p>Hãy chia sẻ trải nghiệm của bạn để giúp chúng tôi cải thiện dịch vụ.</p>
+            </div>
+            <div id="loading-message" class="loading-message" style="display: block;">
+                <i class="fas fa-spinner fa-spin fa-2x"></i>
+                <p style="margin-top: 10px; color: var(--text-light);">Đang tải thông tin đơn hàng...</p>
+            </div>
+            <div id="review-form-wrapper" style="display: none;">
+                <div class="review-form-wrapper">
+                    <form id="review-form">
+                        <div class="form-group">
+                            <label>Mã đơn hàng:</label>
+                            <p id="booking-id" style="font-weight: 500; color: var(--primary-color);">N/A</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Tên dịch vụ:</label>
+                            <p id="service-name" style="font-weight: 500; color: var(--primary-color);">N/A</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Đánh giá sao (0.5-5):</label>
+                            <div class="star-rating" id="star-rating">
+                                <span class="star" data-rating="0.5"><i class="fas fa-star-half-alt"></i></span>
+                                <span class="star" data-rating="1"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="1.5"><i class="fas fa-star-half-alt"></i></span>
+                                <span class="star" data-rating="2"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="2.5"><i class="fas fa-star-half-alt"></i></span>
+                                <span class="star" data-rating="3"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="3.5"><i class="fas fa-star-half-alt"></i></span>
+                                <span class="star" data-rating="4"><i class="fas fa-star"></i></span>
+                                <span class="star" data-rating="4.5"><i class="fas fa-star-half-alt"></i></span>
+                                <span class="star" data-rating="5"><i class="fas fa-star"></i>
+                            </div>
+                            <div class="error-text" id="rating-error">Vui lòng chọn số sao đánh giá.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="comment">Lời nhận xét (tùy chọn, tối đa 500 ký tự):</label>
+                            <textarea id="comment" placeholder="Nhập lời nhận xét của bạn về dịch vụ..." maxlength="500"></textarea>
+                            <div class="error-text" id="comment-error">Lời nhận xét không được vượt quá 500 ký tự.</div>
+                        </div>
+                        <button type="submit" class="submit-btn" id="submit-review-btn">Gửi đánh giá</button>
+                    </form>
+                </div>
+                <a href="/my_bookings.html" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Quay lại lịch sử đặt lịch
+                </a>
+            </div>
+            <div id="error-message" class="error-message" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Không thể tải thông tin đơn hàng. <a href="/my_bookings.html">Quay lại lịch sử đặt lịch</a></p>
+            </div>
+        </div>
+    </main>
+    <footer class="main-footer">
+        <div class="footer-top">
+             <div class="container">
+                 <div class="footer-grid">
+                     <div class="footer-widget about-widget">
+                         <a href="/home.html" class="footer-logo">
+                             <img src="/assets/logo/Ho_Anh_Tuan.png" alt="Logo">
+                             <span>Dịch vụ Tại Nhà</span>
+                         </a>
+                         <p>Cung cấp các dịch vụ tại nhà chất lượng cao, uy tín và chuyên nghiệp...</p>
+                         <div class="social-links">
+                             <a href="#" target="_blank" class="social-link facebook"><i class="fab fa-facebook-f"></i></a>
+                             <a href="#" target="_blank" class="social-link instagram"><i class="fab fa-instagram"></i></a>
+                             <a href="#" target="_blank" class="social-link tiktok"><i class="fab fa-tiktok"></i></a>
+                             <a href="#" target="_blank" class="social-link youtube"><i class="fab fa-youtube"></i></a>
+                         </div>
+                     </div>
+                     <div class="footer-widget">
+                         <h3 class="widget-title">Điều hướng</h3>
+                         <ul class="widget-links">
+                             <li><a href="/home.html">Trang chủ</a></li>
+                             <li><a href="/introduce.html">Giới thiệu</a></li>
+                             <li><a href="/services.html">Dịch vụ</a></li>
+                             <li><a href="/service_price_list.html">Bảng giá</a></li>
+                             <li><a href="/contact.html">Liên hệ</a></li>
+                         </ul>
+                     </div>
+                     <div class="footer-widget">
+                         <h3 class="widget-title">Dịch vụ</h3>
+                         <ul class="widget-links" id="footer-services"></ul>
+                     </div>
+                     <div class="footer-widget">
+                         <h3 class="widget-title">Hỗ trợ</h3>
+                         <ul class="widget-links">
+                             <li><a href="/terms.html">Điều khoản sử dụng</a></li>
+                             <li><a href="/privacy.html">Chính sách bảo mật</a></li>
+                             <li><a href="/faq.html">Câu hỏi thường gặp</a></li>
+                         </ul>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <div class="footer-bottom">
+             <div class="container">
+                 <p>&copy; 2025 Dịch vụ Tại Nhà. All rights reserved. Thiết kế bởi Hồ Anh Tuấn</p>
+             </div>
+         </div>
+    </footer>
+    <button id="backToTop" class="back-to-top" style="display: none;"><i class="fas fa-chevron-up"></i></button>
+    <div class="chat-support">
+         <div class="chat-icon" id="chatIcon">
+             <i class="fas fa-comments"></i>
+             <span class="chat-notification" style="display: none;"></span>
+         </div>
+         <div class="chat-box" id="chatBox" style="opacity: 0; visibility: hidden; transform: translateY(20px) scale(0.9);">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <div class="chat-avatar"><i class="fas fa-headset"></i></div>
+                    <div>
+                        <h3>Hỗ trợ trực tuyến</h3>
+                        <span class="online-status"><i class="fas fa-circle" style="color: #28a745; font-size: 0.6rem;"></i> Đang trực tuyến</span>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <button id="minimizeChat" aria-label="Thu nhỏ"><i class="fas fa-minus"></i></button>
+                    <button id="closeChat" aria-label="Đóng"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <div class="message-content"><p>Xin chào! Chúng tôi có thể giúp gì cho bạn?</p></div>
+                    <span class="message-time">Bây giờ</span>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="messageInput" placeholder="Nhập tin nhắn..." autocomplete="off">
+                <button id="sendMessage" aria-label="Gửi"><i class="fas fa-paper-plane"></i></button>
+            </div>
+         </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="/js/notification.js?v=1.2"></script>
+    <script>
+        // --- CÁC HÀM TIỆN ÍCH - Giống my_bookings ---
+        function showAlert(message, type = 'info') {
+            const alertBox = document.getElementById('success-alert');
+            const messageSpan = document.getElementById('success-message');
+            const iconElement = alertBox.querySelector('.alert-content i');
+            if (!alertBox || !messageSpan || !iconElement) {
+                 console.error("Alert elements not found!");
+                 return;
+            }
+            alertBox.classList.remove('success-alert', 'error-alert', 'info-alert');
+            iconElement.classList.remove('fa-check-circle', 'fa-exclamation-triangle', 'fa-info-circle');
+            let alertClass = 'info-alert';
+            let iconClass = 'fa-info-circle';
+            if (type === 'success') {
+                alertClass = 'success-alert';
+                iconClass = 'fa-check-circle';
+            } else if (type === 'error') {
+                alertClass = 'error-alert';
+                iconClass = 'fa-exclamation-triangle';
+            }
+            alertBox.classList.add(alertClass);
+            iconElement.classList.add(iconClass);
+            messageSpan.textContent = message;
+            alertBox.style.display = 'flex';
+            setTimeout(() => { alertBox.style.display = 'none'; }, 5000);
+            const closeBtn = alertBox.querySelector('.close-alert');
+            if(closeBtn) {
+                 const newBtn = closeBtn.cloneNode(true);
+                 closeBtn.parentNode.replaceChild(newBtn, closeBtn);
+                 newBtn.addEventListener('click', () => { alertBox.style.display = 'none'; });
+            }
+        }
+        function truncateText(text, maxWords) {
+            if (!text) return 'N/A';
+            const words = text.trim().split(/\s+/);
+            if (words.length > maxWords) {
+                return words.slice(0, maxWords).join(' ') + '...';
+            }
+            return text;
+        }
+        // --- AUTH & HEADER/FOOTER LOGIC - Giống my_bookings ---
+        function loadAuthSection() {
+             const token = localStorage.getItem('jwtToken');
+             const authSection = document.getElementById('auth-section');
+             if (!authSection) return;
+             const showLoginRegister = () => {
+                authSection.innerHTML = `<div class="auth-buttons"><a href="/login.html" class="btn btn-outline">Đăng nhập</a><a href="/register.html" class="btn btn-primary">Đăng ký</a></div>`;
+             };
+             const handleAuthError = (error, isLoginPageCheckNeeded = true) => {
+                 console.error('Lỗi xác thực hoặc tải thông tin:', error);
+                 localStorage.removeItem('jwtToken');
+                 localStorage.removeItem('userRole');
+                 showLoginRegister();
+                 if (isLoginPageCheckNeeded && window.location.pathname.includes('/review.html')) {
+                      showAlert('Vui lòng đăng nhập để đánh giá.', 'error');
+                      window.location.href = '/login.html';
+                 }
+             };
+             if (token) {
+                 fetch('/api/users/me', { headers: { 'Authorization': `Bearer ${token}` } })
+                 .then(response => {
+                     if (response.status === 401 || response.status === 403) {
+                         throw new Error('Unauthorized');
+                     }
+                     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                     return response.json();
+                 })
+                 .then(user => {
+                     const avatar = user.avatarURL || '/assets/avatar/default-avatar.png';
+                     const displayName = user.hoTen || 'Người dùng';
+                     authSection.innerHTML = `
+                         <div class="header-actions">
+                             <div class="notification-container">
+                                 <div class="notification-icon"><i class="fas fa-bell"></i><span class="notification-badge" style="display: none;">0</span></div>
+                                 <div class="notification-dropdown">
+                                     <div class="notification-header"><h3>Thông báo</h3><button class="mark-all-read">Đánh dấu đã đọc</button></div>
+                                     <div class="notification-list" id="notification-list"><p class="text-center p-3">Không có thông báo mới.</p></div>
+                                     <div class="notification-footer"><a href="/notifications.html">Xem tất cả</a></div>
+                                 </div>
+                             </div>
+                             <div class="user-menu-container">
+                                 <div class="user-menu-trigger">
+                                     <img src="${avatar}" alt="Avatar" class="user-avatar">
+                                     <span class="user-name">${displayName}</span>
+                                     <i class="fas fa-chevron-down" style="font-size: 0.8em; margin-left: 5px;"></i>
+                                 </div>
+                                 <div class="user-dropdown">
+                                     <a href="/account.html" class="user-dropdown-item"><i class="fas fa-user fa-fw"></i> Hồ sơ cá nhân</a>
+                                     <a href="/my_bookings.html" class="user-dropdown-item"><i class="fas fa-calendar-check fa-fw"></i> Đơn đặt dịch vụ</a>
+                                     <a href="/cart.html" class="user-dropdown-item"><i class="fas fa-shopping-cart"></i> Giỏ hàng của tôi</a>
+                                     <a href="/change_password.html" class="user-dropdown-item"><i class="fas fa-key fa-fw"></i> Đổi mật khẩu</a>
+                                     <div class="dropdown-divider"></div>
+                                     <a href="#" class="user-dropdown-item logout" onclick="logout(event)"><i class="fas fa-sign-out-alt fa-fw"></i> Đăng xuất</a>
+                                 </div>
+                             </div>
+                         </div>`;
+                     setupUserMenuDropdown(authSection);
+                 })
+                 .catch(error => handleAuthError(error));
+             } else {
+                 showLoginRegister();
+                 if (window.location.pathname.includes('/review.html')) {
+                      showAlert('Vui lòng đăng nhập để đánh giá.', 'error');
+                      window.location.href = '/login.html';
+                 }
+             }
+        }
+        function setupUserMenuDropdown(authSection) {
+            const userMenuContainer = authSection.querySelector('.user-menu-container');
+            const userDropdown = authSection.querySelector('.user-dropdown');
+            if (userMenuContainer && userDropdown) {
+                userMenuContainer.addEventListener('mouseenter', () => {
+                    userDropdown.style.opacity = '1';
+                    userDropdown.style.visibility = 'visible';
+                    userDropdown.style.transform = 'translateY(0)';
+                });
+                userMenuContainer.addEventListener('mouseleave', () => {
+                    setTimeout(() => {
+                        if (!userMenuContainer.matches(':hover') && !userDropdown.matches(':hover')) {
+                             userDropdown.style.opacity = '0';
+                             userDropdown.style.visibility = 'hidden';
+                             userDropdown.style.transform = 'translateY(10px)';
+                        }
+                    }, 100);
+                });
+                 userDropdown.addEventListener('mouseenter', () => {
+                     userDropdown.style.opacity = '1';
+                     userDropdown.style.visibility = 'visible';
+                     userDropdown.style.transform = 'translateY(0)';
+                 });
+                  userDropdown.addEventListener('mouseleave', () => {
+                     userDropdown.style.opacity = '0';
+                     userDropdown.style.visibility = 'hidden';
+                     userDropdown.style.transform = 'translateY(10px)';
+                 });
+            }
+        }
+        function logout(event) {
+            event.preventDefault();
+            localStorage.removeItem('jwtToken');
+            localStorage.removeItem('userRole');
+            showAlert('Đăng xuất thành công!', 'success');
+            setTimeout(() => { window.location.href = '/login.html'; }, 1000);
+        }
+        function loadFooterServices() {
+            fetch('/api/services?page=0&size=5')
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+             })
+            .then(data => {
+                const services = data.content || [];
+                const footerServices = document.getElementById('footer-services');
+                if (footerServices && services.length > 0) {
+                    footerServices.innerHTML = services.map(service => `
+                        <li><a href="/service_detail.html?id=${service.id}">${truncateText(service.tenDichVu, 4)}</a></li>
+                    `).join('');
+                } else if (footerServices) {
+                     footerServices.innerHTML = '<li><a href="/services.html">Xem tất cả dịch vụ</a></li>';
+                }
+            }).catch(error => {
+                 console.error('Lỗi lấy dịch vụ footer:', error);
+                 const footerServices = document.getElementById('footer-services');
+                 if (footerServices) footerServices.innerHTML = '<li><a href="/services.html">Lỗi tải dịch vụ</a></li>';
+             });
+        }
+        // --- LOGIC TRANG ĐÁNH GIÁ ---
+        let currentBooking = null;
+        async function fetchBookingDetails() {
+            const loadingMessage = document.getElementById('loading-message');
+            const reviewFormWrapper = document.getElementById('review-form-wrapper');
+            const errorMessage = document.getElementById('error-message');
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookingId = urlParams.get('booking_id');
+            if (!bookingId) {
+                loadingMessage.style.display = 'none';
+                showAlert('Không tìm thấy ID đơn hàng.', 'error');
+                window.location.href = '/my_bookings.html';
+                return;
+            }
+            const token = localStorage.getItem('jwtToken');
+            if (!token) {
+                loadingMessage.style.display = 'none';
+                return; // loadAuthSection sẽ xử lý
+            }
+            try {
+                const response = await fetch(`/api/orders/${bookingId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.status === 401 || response.status === 403) {
+                    throw new Error('Unauthorized');
+                }
+                if (!response.ok) {
+                    throw new Error(`Lỗi tải đơn hàng: ${response.status}`);
+                }
+                currentBooking = await response.json();
+                loadingMessage.style.display = 'none';
+                if (currentBooking.trangThai !== 'HOAN_THANH') {
+                    showAlert('Chỉ có thể đánh giá đơn hàng đã hoàn thành.', 'error');
+                    window.location.href = '/my_bookings.html';
+                    return;
+                }
+                if (!currentBooking.service || !currentBooking.service.id) {
+                    throw new Error('Thông tin dịch vụ không hợp lệ.');
+                }
+                console.log('Loaded booking:', currentBooking);
+                document.getElementById('booking-id').textContent = `#${currentBooking.id}`;
+                document.getElementById('service-name').textContent = currentBooking.service ? currentBooking.service.tenDichVu : 'N/A';
+                reviewFormWrapper.style.display = 'block';
+                setupStarRating();
+                setupFormSubmission();
+            } catch (error) {
+                console.error('Lỗi tải chi tiết đơn hàng:', error);
+                loadingMessage.style.display = 'none';
+                reviewFormWrapper.style.display = 'none';
+                errorMessage.style.display = 'block';
+                showAlert(`Không thể tải thông tin: ${error.message}`, 'error');
+            }
+        }
+       
+        function setupStarRating() {
+            const stars = document.querySelectorAll('#star-rating .star');
+            const submitBtn = document.getElementById('submit-review-btn');  // THÊM: Reference submit btn
+            let selectedRating = 0;
+            // Reset toàn bộ hiệu ứng
+            function clearActive() {
+                stars.forEach(s => s.classList.remove('selected', 'active'));
+            }
+            // Tô màu theo rating hiện tại
+            function applyRating(r) {
+                stars.forEach(s => {
+                    const val = parseFloat(s.dataset.rating);
+                    s.classList.toggle('selected', val <= r);
+                });
+            }
+            // THÊM: Update submit btn state dựa trên rating
+            function updateSubmitState() {
+                if (selectedRating >= 0.5) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Gửi đánh giá';
+                } else {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Vui lòng chọn số sao từ 0.5';
+                }
+            }
+            stars.forEach(star => {
+                // Hover để xem trước rating
+                star.addEventListener('mouseover', () => {
+                    const value = parseFloat(star.dataset.rating);
+                    clearActive();
+                    stars.forEach(s => {
+                        const v = parseFloat(s.dataset.rating);
+                        if (v <= value) s.classList.add('active');
+                    });
+                });
+                // Click để chọn rating
+                star.addEventListener('click', () => {
+                    const value = parseFloat(star.dataset.rating);
+                    // Nhấn lại đúng giá trị đang chọn → bỏ chọn
+                    if (Math.abs(selectedRating - value) < 0.01) {
+                        selectedRating = 0;
+                        clearActive();
+                    } else {
+                        selectedRating = value;
+                        clearActive();
+                        applyRating(selectedRating);
+                    }
+                    document.getElementById('rating-error').style.display = 'none';
+                    updateSubmitState();  // THÊM: Update btn state
+                    console.log('Selected rating:', selectedRating);  // THÊM LOG DEBUG
+                });
+            });
+            // Khi rời khỏi khu vực sao → hiển thị rating chính thức
+            document.getElementById('star-rating').addEventListener('mouseleave', () => {
+                clearActive();
+                if (selectedRating > 0) applyRating(selectedRating);
+            });
+            // THÊM: Initial state - disable btn
+            updateSubmitState();
+            // Cho submit lấy giá trị
+            window.getSelectedRating = () => selectedRating;
+        }
+
+        function setupFormSubmission() {
+            const form = document.getElementById('review-form');
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const rating = window.getSelectedRating();
+                const comment = document.getElementById('comment').value.trim();
+                const ratingError = document.getElementById('rating-error');
+                const commentError = document.getElementById('comment-error');
+                ratingError.style.display = 'none';
+                commentError.style.display = 'none';
+                let valid = true;
+                if (rating < 0.5 || rating > 5.0 || rating % 0.5 !== 0) {
+                    ratingError.textContent = 'Vui lòng chọn số sao từ 0.5 đến 5.0 (bước 0.5).';
+                    ratingError.style.display = 'block';
+                    valid = false;
+                    console.log('Validation fail: rating =', rating);
+                }
+                if (comment.length > 500) {
+                    commentError.style.display = 'block';
+                    valid = false;
+                }
+                if (!valid) {
+                    return;
+                }
+                const submitBtn = document.getElementById('submit-review-btn');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Đang gửi...';
+                const token = localStorage.getItem('jwtToken');
+
+                if (!currentBooking || !currentBooking.service || !currentBooking.service.id) {
+                    showAlert('Thông tin đơn hàng không hợp lệ.', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Gửi đánh giá';
+                    return;
+                }
+                console.log('Submitting review with rating:', rating);
+                try {
+                    const response = await fetch('/api/reviews', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            orderId: currentBooking.id,
+                            serviceId: currentBooking.service.id,
+                            rating: rating,
+                            noiDung: comment || null
+                        })
+                    });
+                    if (response.status === 401) {
+                        throw new Error('Token hết hạn. Vui lòng đăng nhập lại.');
+                    } else if (response.status === 403) {
+                        throw new Error('Không có quyền truy cập endpoint này.');  
+                    } else if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.message || `Lỗi gửi đánh giá: ${response.status}`);
+                    }
+                    await response.json(); // Đọc response nếu cần
+                    showAlert('Đánh giá đã được gửi thành công! Cảm ơn bạn.', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/my_bookings.html';
+                    }, 1500);
+                } catch (error) {
+                    console.error('Lỗi gửi đánh giá:', error);
+                    showAlert(`Bạn không thể gửi đánh giá: ${error.message}`, 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Gửi đánh giá';
+                }
+            });
+        }
+        // --- KHỞI TẠO TRANG - Giống my_bookings ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAuthSection();
+            loadFooterServices();
+            if (localStorage.getItem('jwtToken')) {
+                fetchBookingDetails();
+            } else {
+                document.getElementById('loading-message').style.display = 'none';
+            }
+            // Chat, back to top, hamburger - Giống my_bookings
+            const chatIcon = document.getElementById('chatIcon');
+            const chatBox = document.getElementById('chatBox');
+            const closeChat = document.getElementById('closeChat');
+            const minimizeChat = document.getElementById('minimizeChat');
+            if (chatIcon && chatBox && closeChat && minimizeChat) {
+                chatIcon.addEventListener('click', () => chatBox.classList.toggle('active'));
+                closeChat.addEventListener('click', () => chatBox.classList.remove('active'));
+                minimizeChat.addEventListener('click', () => chatBox.classList.remove('active'));
+            }
+            const backToTopButton = document.getElementById('backToTop');
+            if (backToTopButton) {
+                window.addEventListener('scroll', () => {
+                    backToTopButton.classList.toggle('active', window.scrollY > 300);
+                    backToTopButton.style.display = backToTopButton.classList.contains('active') ? 'flex' : 'none';
+                });
+                backToTopButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            }
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('.nav-menu');
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', () => {
+                    hamburger.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                navMenu.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('nav-link')) {
+                        hamburger.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

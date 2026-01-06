@@ -1,0 +1,426 @@
+<div class="content-header">
+    <h2>Quản Lý Đơn Hàng</h2>
+    <button class="btn btn-success-lift" id="add-order-btn">
+        <i class="fas fa-plus"></i> Thêm Đơn Hàng Mới
+    </button>
+</div>
+
+<div class="filter-bar" style="margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+    
+    <input 
+        type="text" 
+        id="order-search-input" 
+        placeholder="Tìm theo tên, sđt, dịch vụ (không dấu)..." 
+        style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; flex-grow: 1; min-width: 250px;"
+    >
+    
+    <select id="order-sort-select" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        <option value="">Sắp xếp...</option>
+        <option value="newest">Mới nhất (Mặc định)</option>
+        <option value="oldest">Cũ nhất</option>
+        <option value="az">Tên khách hàng A → Z</option>
+        <option value="za">Tên khách hàng Z → A</option>
+    </select>
+    
+    <select id="order-status-filter" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        <option value="">Lọc Trạng Thái</option>
+        <option value="CHUA_XU_LY">Chưa Xử Lý</option>
+        <option value="DA_NHAN">Đã Nhận</option>
+        <option value="HOAN_THANH">Hoàn Thành</option>
+        <option value="HUY">Hủy</option>
+    </select>
+    
+    <select id="order-payment-filter" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        <option value="">Lọc Thanh Toán</option>
+        <option value="TIEN_MAT">Tiền Mặt</option>
+        <option value="CHUYEN_KHOAN">Chuyển Khoản</option>
+    </select>
+</div>
+
+<div class="content-body">
+    <table class="data-table" id="orders-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Khách Hàng</th>
+                <th>Dịch Vụ</th>
+                <th>Nhân viên</th>
+                <th>Thanh Toán</th> 
+                <th>Trạng Thái</th>
+                <th>SĐT</th>
+                <th>Notes</th>         
+                <th>Sửa</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dữ liệu đơn hàng sẽ được chèn vào đây bằng JS -->
+        </tbody>
+    </table>
+    <!-- Thêm div pagination -->
+    <div class="pagination" style="margin-top: 20px; text-align: center;">
+        <button class="btn btn-secondary" id="prev-page-btn" disabled>Trước</button>
+        <span id="page-info">Trang 1 / 1</span>
+        <button class="btn btn-secondary" id="next-page-btn" disabled>Sau</button>
+    </div>
+</div>
+<!-- Modal Chi Tiết -->
+<div class="modal" id="detail-modal">
+    <div class="modal-content">
+        <span class="close-btn" data-close-modal="detail-modal">×</span>
+        <h3 id="detail-title" style="text-align: center;">Chi Tiết</h3>
+        <div id="detail-content" style="margin: 20px 0; white-space: pre-wrap;"></div>
+    </div>
+</div>
+
+<!-- Modal Thêm/Sửa Đơn Hàng -->
+<div class="modal" id="order-modal" style="display: none; z-index: 1001;">
+    <div class="modal-content">
+        <span class="close-btn" data-close-modal="order-modal">&times;</span>
+        <h3 id="modal-title">Thêm Đơn Hàng Mới</h3>
+        <form id="order-form">
+            <input type="hidden" id="order-id">
+<input type="text" id="khachHangSearch" placeholder="Tìm tên..." required>
+<input type="hidden" id="khachHangId">
+<div id="suggestion-list" class="suggestion-list"></div>
+<label for="employeeName">Nhân viên thực hiện:</label>
+            <input 
+                type="text" 
+                id="employeeName" 
+                name="employeeName" 
+                readonly 
+                style="background-color: #eee; cursor: not-allowed;"
+                placeholder="Chưa có nhân viên nào nhận đơn"
+            >
+<label for="dichVuSearch">Dịch Vụ:</label>
+<input 
+    type="text" 
+    id="dichVuSearch" 
+    placeholder="Tìm tên dịch vụ..." 
+    autocomplete="off"
+    required
+>
+<input type="hidden" id="dichVuId">
+<div id="service-suggestion-list" class="suggestion-list"></div>
+            <label for="thoiGianDat">Thời Gian Đặt:</label>
+            <input 
+    type="datetime-local" 
+    id="thoiGianDat" 
+    name="thoiGianDat" 
+    required 
+    min="2025-11-15T00:00"
+/>
+            <label for="diaChiDichVu">Địa Chỉ Dịch Vụ:</label>
+            <textarea id="diaChiDichVu" name="diaChiDichVu" required placeholder="Nhập địa chỉ thực hiện dịch vụ"></textarea>
+            <label for="tongTien">Tổng Tiền (VNĐ):</label>
+<input 
+    type="number" 
+    id="tongTien" 
+    name="tongTien" 
+    step="0.01" 
+    required 
+    readonly 
+    placeholder="Tự động từ dịch vụ"
+>
+            <label for="phuongThucThanhToan">Phương Thức Thanh Toán:</label>
+            <select id="phuongThucThanhToan" name="phuongThucThanhToan" required>
+                <option value="">Chọn phương thức...</option>
+                <option value="TIEN_MAT">Tiền Mặt</option>
+                <option value="CHUYEN_KHOAN">Chuyển Khoản</option>
+            </select>
+            <label for="trangThai">Trạng Thái:</label>
+            <select id="trangThai" name="trangThai" required>
+                <option value="">Chọn trạng thái...</option>
+                <option value="CHUA_XU_LY">Chưa Xử Lý</option>
+                <option value="DA_NHAN">Đã Nhận</option>
+                <option value="HOAN_THANH">Hoàn Thành</option>
+                <option value="HUY">Hủy</option>
+            </select>
+            <label for="paymentStatus">Tình Trạng Thanh Toán:</label>
+            <!-- Tự động thêm bằng JS -->
+<input type="hidden" id="hidden-payment-status" name="paymentStatus" value="UNPAID">
+<select id="paymentStatus" name="paymentStatus" required>
+    <option value="" disabled selected>Chọn tình trạng...</option>
+    <option value="UNPAID">Chưa Thanh Toán</option>
+    <option value="PAID">Đã Thanh Toán</option>
+</select>
+            <label for="notes">Ghi chú:</label>
+<textarea 
+    id="notes" 
+    name="notes" 
+    rows="3" 
+    placeholder="Ghi chú từ khách hàng (admin không thể sửa)"></textarea>
+    <label for="sdt">Số điện thoại liên hệ:</label>
+<input 
+    type="text" 
+    id="sdt" 
+    name="sdt" 
+    placeholder="Nhập SĐT khách hàng" 
+    pattern="^0[3|5|7|8|9][0-9]{8}$" 
+    title="SĐT phải có 10 số, bắt đầu bằng 03, 05, 07, 08, 09"
+    required 
+/>
+            <button type="submit" class="btn btn-primary mt-4" id="submit-order-btn">Lưu Đơn Hàng</button>
+        </form>
+    </div>
+</div>
+
+
+<style>
+/* Giữ nguyên CSS */
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.data-table th, .data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+.data-table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+.data-table tbody tr:hover {
+    background-color: #f5f5f5;
+}
+.btn {
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 12px;
+    margin-right: 5px;
+}
+.btn-success-lift {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.4);
+}
+.btn-success-lift:hover {
+    background-color: #218838;
+    box-shadow: 0 6px 15px rgba(40, 167, 69, 0.6);
+    transform: translateY(-1px);
+}
+.btn-success-lift i {
+    pointer-events: none;
+}
+.btn-info {
+    background-color: #17a2b8;
+    color: white;
+}
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+.mt-4 {
+    margin-top: 1.5rem;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+}
+.modal[style*="display: flex"] {
+    visibility: visible !important;
+}
+.modal-content {
+    /* Giảm padding để tiết kiệm không gian xung quanh */
+    padding: 20px; /* Giảm từ 30px xuống 20px */
+    
+    /* (Tùy chọn) Giảm Max-Width nếu bạn muốn nó nhỏ hơn chiều ngang */
+    max-width: 500px; /* Giảm từ 600px xuống 500px */
+    
+    /* Thiết lập chiều cao tối đa và bật cuộn dọc */
+    max-height: 90vh; /* Giới hạn chiều cao tối đa là 90% chiều cao viewport */
+    overflow-y: auto; /* Quan trọng: Cho phép nội dung bên trong cuộn */
+    
+    /* Giữ nguyên các thuộc tính khác... */
+    background-color: #fefefe;
+    border-radius: 10px;
+    width: 90%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+}
+.modal-content.small-modal {
+    max-width: 400px;
+    text-align: center;
+}
+@keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
+}
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+.close-btn:hover,
+.close-btn:focus {
+    color: #000;
+    text-decoration: none;
+}
+#order-form input[type="text"],
+#order-form input[type="number"],
+#order-form input[type="datetime-local"],
+#order-form select,
+#order-form textarea {
+    width: 100%;
+    /* Giảm Padding để làm input nhỏ lại */
+    padding: 8px; /* Giảm từ 10px xuống 8px */
+    /* Giảm Margin-bottom để các trường gần nhau hơn */
+    margin: 4px 0 10px 0; /* Giảm khoảng cách trên và dưới */
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Thêm CSS cho Label để giảm khoảng cách */
+.modal-content label {
+    margin-top: 5px; /* Giảm khoảng cách trên label */
+    display: block; 
+    font-weight: 600; 
+}
+.modal-actions {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    margin-top: 20px;
+}
+.modal-actions .btn {
+    flex: 1;
+}
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+.suggestion-list {
+    /* Đảm bảo nó không chiếm quá nhiều không gian theo chiều dọc khi không hiển thị */
+    max-height: 150px; 
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-top: none;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px; /* Giảm margin dưới */
+}
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+.suggestion-item:hover {
+    background: #f0f7ff;
+}
+.suggestion-item .price {
+    color: #e74c3c;
+    font-weight: 600;
+}
+.description-icon {
+    background-color: #17a2b8;   /* màu nền xanh */
+    border: none;
+    border-radius: 17%;          /* bo tròn */
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.description-icon i {
+    color: #fff;                 /* icon màu trắng */
+    font-size: 16px;
+}
+
+/* Hiệu ứng hover */
+.description-icon:hover {
+    background-color: #138496;   /* màu đậm hơn khi hover */
+}
+
+/* Badge trạng thái */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+.status-chua_xu_ly { background: #fff3cd; color: #856404; }
+.status-da_nhan { background: #d4edda; color: #155724; }
+.status-hoan_thanh { background: #d1ecf1; color: #0c5460; }
+.status-huy { background: #f8d7da; color: #721c24; }
+
+/* Modal chi tiết */
+#detail-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1002;
+    justify-content: center;
+    align-items: center;
+}
+#detail-modal .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+}
+#detail-modal .close-btn {
+    position: absolute;
+    top: 10px; right: 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+select.locked {
+    background-color: #f8f9fa !important;
+    color: #495057 !important;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+</style>

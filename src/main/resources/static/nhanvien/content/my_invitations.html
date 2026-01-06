@@ -1,0 +1,51 @@
+<div class="content-header">
+    <h2><i class="fas fa-envelope-open-text"></i> Lời mời mới</h2>
+    <p>Đây là các đơn hàng bạn đã được mời. Vui lòng chấp nhận hoặc từ chối.</p>
+</div>
+
+<div class="invitation-controls">
+    <div class="search-bar-container">
+        <i class="fas fa-search"></i>
+        <input type="text" id="invitation-search-input" placeholder="Tìm theo tên khách, dịch vụ, SĐT, email...">
+    </div>
+</div>
+
+<div class="invitations-list" id="invitations-list-container">
+    </div>
+
+<div class="pagination-container" id="invitation-pagination">
+    </div>
+
+<template id="invitation-card-template">
+    <div class="invitation-card">
+        <div class="card-header">
+            <span class="service-name"></span>
+            <span class="time-ago"></span>
+        </div>
+        <div class="card-body">
+            <div class="info-row">
+                <i class="fas fa-calendar-alt"></i>
+                <span class="thoi-gian-dat"></span>
+            </div>
+            <div class="info-row">
+                <i class="fas fa-map-marker-alt"></i>
+                <span class="dia-chi"></span>
+            </div>
+            <div class="info-row">
+                <i class="fas fa-sticky-note"></i>
+                <span class="ghi-chu"></span>
+            </div>
+        </div>
+        <div class="card-actions">
+            <button class="btn btn-sm btn-secondary btn-view-details">
+                <i class="fas fa-eye"></i> Xem
+            </button>
+            <button class="btn btn-sm btn-danger btn-reject">
+                <i class="fas fa-times"></i> Từ chối
+            </button>
+            <button class="btn btn-sm btn-success btn-accept">
+                <i class="fas fa-check"></i> Chấp nhận
+            </button>
+        </div>
+    </div>
+</template>

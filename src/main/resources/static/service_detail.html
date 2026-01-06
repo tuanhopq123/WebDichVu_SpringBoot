@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết Dịch vụ - Dịch vụ Tại Nhà</title>
+    <link href="/css/style_index.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Icons&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS cho bố cục trang chi tiết */
+        .service-detail-container {
+            padding: 4rem 0;
+            background-color: #fff;
+        }
+
+        .service-detail-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2.5rem;
+            align-items: flex-start;
+        }
+
+        .service-image-gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: var(--rounded-lg);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+        }
+        
+        .service-image-thumbnails {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .service-image-thumbnails img {
+            border-radius: var(--rounded-md);
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .service-image-thumbnails img:hover,
+        .service-image-thumbnails img.active {
+            opacity: 1;
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .service-info .service-category {
+            /* Thuộc tính cũ giữ nguyên */
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+
+            /* --- BỔ SUNG ĐỂ SỬA LỖI --- */
+            position: static;               /* Reset lại vị trí */
+            background-color: transparent;  /* Xóa nền xanh */
+            color: var(--primary-color);    /* Đảm bảo chữ màu xanh */
+            padding: 0;                     /* Xóa padding thừa */
+            border-top-right-radius: 0;     /* Xóa bo góc thừa */
+        }
+
+        .service-info .service-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        .service-info .service-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+
+        .service-info .stars {
+            color: var(--warning-color);
+        }
+
+        .service-info .service-description {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Sidebar đặt lịch */
+        .booking-sidebar {
+            background-color: var(--bg-light);
+            padding: 2rem;
+            border-radius: var(--rounded-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            position: sticky;
+            top: 100px; /* 80px (header) + 20px (margin) */
+        }
+        
+        .booking-sidebar .price-box {
+            margin-bottom: 1.5rem;
+        }
+
+        .booking-sidebar .price-label {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .booking-sidebar .service-price {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .booking-sidebar .service-meta {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .booking-sidebar .service-meta li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        .booking-sidebar .service-meta li i {
+            color: var(--primary-color);
+            font-size: 1.25rem;
+            width: 25px;
+            text-align: center;
+        }
+        
+        /* Nút Đặt lịch */
+        #book-now-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .booking-sidebar .secure-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            color: var(--text-light);
+            font-size: 0.875rem;
+        }
+
+        /* --- Khu vực Đánh giá --- */
+        .reviews-section {
+            padding: 4rem 0;
+            background-color: var(--bg-light);
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .review-card {
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--rounded-md);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .review-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .review-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+        
+        .review-info h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .review-info .review-date {
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+        
+        .review-rating {
+            color: var(--warning-color);
+            margin-bottom: 1rem;
+        }
+        
+        .review-body {
+            font-size: 1rem;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 992px) {
+            .service-detail-grid {
+                grid-template-columns: 1fr;
+            }
+            .booking-sidebar {
+                position: static;
+                margin-top: 2rem;
+            }
+        }
+        @media screen and (max-width: 576px) {
+            .service-info .service-title {
+                font-size: 2rem;
+            }
+            .booking-sidebar {
+                padding: 1.5rem;
+            }
+            .service-image-thumbnails {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container header-container">
+            <a href="/home.html" class="logo">
+                <img src="/assets/logo/Ho_Anh_Tuan.png" alt="Logo" style="height: 50px; border-radius: 17px;">
+                <span class="logo-text">Dịch vụ Tại Nhà</span>
+            </a>
+            <nav class="main-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="/home.html" class="nav-link">Trang chủ</a></li>
+                    <li class="nav-item"><a href="/introduce.html" class="nav-link">Giới thiệu</a></li>
+                    <li class="nav-item"><a href="/services.html" class="nav-link active">Dịch vụ</a></li>
+                    <li class="nav-item"><a href="/service_price_list.html" class="nav-link">Bảng giá</a></li>
+                    <li class="nav-item"><a href="/contact.html" class="nav-link">Liên hệ</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <div id="auth-section">
+                    </div>
+                <button class="hamburger" aria-label="Menu">
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="service-detail-container">
+            <div class="container">
+                <div class="service-detail-grid">
+                    
+                    <div class="service-detail-content">
+                        <div class="service-image-gallery">
+                            <img src="/assets/images/f75e6fce-b4d3-4609-903e-a3452c820033_images (1).jpg" alt="Ảnh dịch vụ chính" id="main-service-image">
+                        </div>
+                        
+                        <div class="service-info" style="margin-top: 2rem;">
+                            <p class="service-category" id="service-category">Đang tải...</p>
+                            <h1 class="service-title" id="service-title">Đang tải...</h1>
+                            <div class="service-rating">
+                                <span class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </span>
+                                <span>(3 đánh giá)</span> </div>
+                            <p class="service-description" id="service-description">Đang tải mô tả chi tiết...</p>
+                        </div>
+                    </div>
+
+                    <aside class="booking-sidebar">
+                        <div class="price-box">
+                            <p class="price-label">Giá dịch vụ</p>
+                            <h2 class="service-price" id="service-price">Đang tải...</h2>
+                        </div>
+                        <ul class="service-meta">
+                            <li><i class="fas fa-clock"></i> <span id="service-duration">Đang tải...</span></li>
+                            <li><i class="fas fa-shield-alt"></i> <span>Bảo hành 30 ngày</span></li>
+                            <li><i class="fas fa-calendar-check"></i> <span>Hỗ trợ 24/7</span></li>
+                        </ul>
+                        <a href="#" id="book-now-btn" class="btn btn-primary btn-lg">
+                            <i class="material-icons">event</i> Đặt lịch ngay
+                        </a>
+                        <div class="secure-badge">
+                            <i class="fas fa-lock"></i> Thanh toán an toàn
+                        </div>
+                    </aside>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="reviews-section">
+            <div class="container">
+                <div class="section-header" style="text-align: left; margin-bottom: 2rem;">
+                    <h2 class="section-title">Đánh giá từ khách hàng</h2>
+                    <p class="section-description" style="margin-left: 0; max-width: none;">
+                        Đây là các phản hồi từ những khách hàng đã sử dụng dịch vụ này.
+                    </p>
+                </div>
+                
+                <div id="reviews-list">
+                    <p id="reviews-loading-message" style="text-align: center; padding: 2rem 0; color: var(--text-light);">
+                        <i class="fas fa-spinner fa-spin"></i> Đang tải đánh giá...
+                    </p>
+                </div>
+        </section>
+
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-top">
+             <div class="container">
+                 <div class="footer-grid">
+                     <div class="footer-widget about-widget">
+                         <a href="/home.html" class="footer-logo">
+                             <img src="/assets/logo/Ho_Anh_Tuan.png" alt="Logo">
+                             <span>Dịch vụ Tại Nhà</span>
+                         </a>
+                         <p>Cung cấp các dịch vụ tại nhà chất lượng cao, uy tín và chuyên nghiệp.</p>
+                         <div class="social-links">
+                             <a href="#" target="_blank" class="social-link facebook"><i class="fab fa-facebook-f"></i></a>
+                             <a href="#" target="_blank" class="social-link instagram"><i class="fab fa-instagram"></i></a>
+                             <a href="#" target="_blank" class="social-link tiktok"><i class="fab fa-tiktok"></i></a>
+                             <a href="#" target="_blank" class="social-link youtube"><i class="fab fa-youtube"></i></a>
+                         </div>
+                     </div>
+                     <div class="footer-widget">
+                         <h3 class="widget-title">Điều hướng</h3>
+                         <ul class="widget-links">
+                             <li><a href="/home.html">Trang chủ</a></li>
+                             <li><a href="/introduce.html">Giới thiệu</a></li>
+                             <li><a href="/services.html">Dịch vụ</a></li>
+                             <li><a href="/service_price_list.html">Bảng giá</a></li>
+                             <li><a href="/contact.html">Liên hệ</a></li>
+                         </ul>
+                     </div>
+                     <div class="footer-widget">
+                         <h3 class="widget-title">Dịch vụ</h3>
+                         <ul class="widget-links" id="footer-services">
+                             </ul>
+                     </div>
+                     <div class="footer-widget">
+                         <h3 class="widget-title">Hỗ trợ</h3>
+                         <ul class="widget-links">
+                             <li><a href="/terms.html">Điều khoản sử dụng</a></li>
+                             <li><a href="/privacy.html">Chính sách bảo mật</a></li>
+                             <li><a href="/faq.html">Câu hỏi thường gặp</a></li>
+                         </ul>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <div class="footer-bottom">
+             <div class="container">
+                 <p>&copy; 2025 Dịch vụ Tại Nhà. All rights reserved. Thiết kế bởi Hồ Anh Tuấn</p>
+             </div>
+         </div>
+    </footer>
+    <script src="/js/notification.js"></script>
+    <script>
+
+        // --- CÁC HÀM TIỆN ÍCH (Auth, Logout, Menu...) ---
+
+        function renderStars(rating) {
+            if (typeof rating !== 'number' || rating < 0) {
+                return '<span style="color: var(--text-light);">Chưa có đánh giá</span>';
+            }
+            
+            let starsHTML = '';
+            const fullStars = Math.floor(rating);
+            const halfStar = (rating % 1 !== 0);
+            const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+            // Thêm sao đầy
+            for(let i = 0; i < fullStars; i++) {
+                starsHTML += '<i class="fas fa-star"></i>';
+            }
+            // Thêm sao rưỡi (nếu có)
+            if(halfStar) {
+                starsHTML += '<i class="fas fa-star-half-alt"></i>';
+            }
+            // Thêm sao rỗng
+            for(let i = 0; i < emptyStars; i++) {
+                starsHTML += '<i class="far fa-star"></i>';
+            }
+            return starsHTML;
+        }
+        
+        // Cắt văn bản (để dùng cho footer)
+        function truncateText(text, maxWords) {
+            if (!text) return 'Không có mô tả';
+            const words = text.trim().split(/\s+/);
+            if (words.length > maxWords) {
+                return words.slice(0, maxWords).join(' ') + '...';
+            }
+            return text;
+        }
+
+        // Tải Header (Auth Section)
+        function loadAuthSection() {
+            const token = localStorage.getItem('jwtToken');
+            const authSection = document.getElementById('auth-section');
+
+            if (token) {
+                fetch('/api/users/me', { headers: { 'Authorization': `Bearer ${token}` } })
+                .then(response => {
+                    if (!response.ok) throw new Error('Unauthorized');
+                    return response.json();
+                })
+                .then(user => {
+                    const avatar = user.avatarURL || '/assets/avatar/default-avatar.png';
+                    const displayName = user.hoTen || 'Người dùng';
+                    authSection.innerHTML = `
+                        <div class="header-actions">
+                            <div class="notification-container">
+                                <div class="notification-icon"><i class="fas fa-bell"></i><span class="notification-badge" style="display: none;"></span></div>
+                                <div class="notification-dropdown">
+                                    <div class="notification-header"><h3>Thông báo</h3><button class="mark-all-read">Đánh dấu đã đọc</button></div>
+                                    <div class="notification-list" id="notification-list"></div>
+                                    <div class="notification-footer"><a href="/notifications.html">Xem tất cả</a></div>
+                                </div>
+                            </div>
+                            <div class="user-menu-container">
+                                <div class="user-menu-trigger">
+                                    <img src="${avatar}" alt="Avatar" class="user-avatar">
+                                    <span class="user-name">${displayName}</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="user-dropdown">
+                                    <a href="/account.html" class="user-dropdown-item"><i class="fas fa-user"></i> Hồ sơ cá nhân</a>
+                                    <a href="/my_bookings.html" class="user-dropdown-item"><i class="fas fa-calendar-check"></i> Đơn đặt dịch vụ</a>
+                                    <a href="/cart.html" class="user-dropdown-item"><i class="fas fa-shopping-cart"></i> Giỏ hàng của tôi</a>
+                                    <a href="/change_password.html" class="user-dropdown-item"><i class="fas fa-key"></i> Đổi mật khẩu</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a href="#" class="user-dropdown-item logout" onclick="logout(event)"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                                </div>
+                            </div>
+                        </div>`;
+                        const initialCount = localStorage.getItem('unreadNotificationCount') || 0;
+                
+                // Các hàm này đến từ /js/notification.js
+                updateBadgeCount(initialCount);
+                loadNotifications(token);
+                setupNotificationClick();
+                        
+                })
+                .catch(() => {
+                    localStorage.removeItem('jwtToken');
+                    authSection.innerHTML = `<div class="auth-buttons"><a href="/login.html" class="btn btn-outline">Đăng nhập</a><a href="/register.html" class="btn btn-primary">Đăng ký</a></div>`;
+                });
+            } else {
+                authSection.innerHTML = `<div class="auth-buttons"><a href="/login.html" class="btn btn-outline">Đăng nhập</a><a href="/register.html" class="btn btn-primary">Đăng ký</a></div>`;
+            }
+        }
+
+        // Đăng xuất
+        function logout(event) {
+            event.preventDefault();
+            localStorage.removeItem('jwtToken');
+            localStorage.removeItem('userRole');
+            window.location.href = '/login.html';
+        }
+
+        // Tải dịch vụ cho Footer
+        function loadFooterServices() {
+            fetch('/api/services?page=0&size=5')
+            .then(response => response.json())
+            .then(services => {
+                const footerServices = document.getElementById('footer-services');
+                if (footerServices) {
+                    const data = Array.isArray(services.content) ? services.content : (Array.isArray(services) ? services : []);
+                    footerServices.innerHTML = data.map(service => `
+                        <li><a href="/service_detail.html?id=${service.id}">${truncateText(service.tenDichVu, 4)}</a></li>
+                    `).join('');
+                }
+            }).catch(error => console.error('Lỗi lấy dịch vụ footer:', error));
+        }
+
+        // Xử lý Menu Mobile (Hamburger)
+        function setupMobileMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('.nav-menu');
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', () => {
+                    hamburger.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+            }
+        }
+
+        // --- LOGIC CHÍNH CỦA TRANG CHI TIẾT DỊCH VỤ ---
+
+        async function loadServiceDetail() {
+            try {
+                // 1. Lấy ID dịch vụ từ URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const serviceId = urlParams.get('id');
+
+                if (!serviceId) {
+                    throw new Error('Không tìm thấy ID dịch vụ trong URL.');
+                }
+
+                // 2. Gọi API để lấy chi tiết dịch vụ
+                // API này công khai theo SecurityConfig (permitAll /api/services/**)
+                const response = await fetch(`/api/services/${serviceId}`);
+                if (!response.ok) {
+                    throw new Error(`Lỗi khi tải dịch vụ: ${response.statusText}`);
+                }
+                const service = await response.json();
+
+                // 3. Cập nhật nội dung trang (DOM)
+                document.title = `${service.tenDichVu} - Dịch vụ Tại Nhà`;
+                
+                // Cột trái
+                document.getElementById('main-service-image').src = service.imageURL || '/assets/images/f75e6fce-b4d3-4609-903e-a3452c820033_images (1).jpg';
+                document.getElementById('service-category').textContent = service.category ? service.category.tenDanhMuc : 'Chưa phân loại';
+                document.getElementById('service-title').textContent = service.tenDichVu;
+                document.getElementById('service-description').innerHTML = service.moTa ? service.moTa.replace(/\n/g, '<br>') : 'Không có mô tả chi tiết.';
+                
+                // Cột phải (Sidebar)
+                document.getElementById('service-price').textContent = `${new Intl.NumberFormat('vi-VN').format(service.giaCoBan)} đ`;
+                document.getElementById('service-duration').textContent = `Ước tính: ${service.thoiGianHoanThanh || 'N/A'} phút`;
+                
+                // Cập nhật link nút "Đặt lịch ngay"
+                const bookBtn = document.getElementById('book-now-btn');
+                bookBtn.href = `/booking.html?service_id=${service.id}`;
+
+                // 4. Tải đánh giá sau khi đã có serviceId
+                loadReviews(serviceId);
+
+            } catch (error) {
+                console.error('Lỗi tải chi tiết dịch vụ:', error);
+                const contentArea = document.querySelector('.service-detail-container');
+                contentArea.innerHTML = `<div class="container" style="text-align: center; padding: 5rem 0;">
+                                            <h2><i class="fas fa-exclamation-triangle" style="color: red;"></i> Lỗi tải dịch vụ</h2>
+                                            <p>${error.message}</p>
+                                            <a href="/services.html" class="btn btn-primary">Quay lại trang dịch vụ</a>
+                                         </div>`;
+            }
+        }
+        
+        // --- LOGIC TẢI ĐÁNH GIÁ (ĐÃ CẬP NHẬT) ---
+        async function loadReviews(serviceId) {
+            const reviewsList = document.getElementById('reviews-list');
+            
+            const loadingMessage = document.getElementById('reviews-loading-message');
+            if (loadingMessage) {
+                loadingMessage.remove();
+            }
+
+            if (!serviceId) {
+                reviewsList.innerHTML = '<p style="text-align: center; color: red;">Không thể tải đánh giá: ID dịch vụ không hợp lệ.</p>';
+                return;
+            }
+
+            try {
+                // 1. Chuẩn bị header (giống như trước)
+                const token = localStorage.getItem('jwtToken');
+                const headers = { 'Content-Type': 'application/json' };
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+
+                // 2. Gọi API
+                const response = await fetch(`/api/reviews/service/${serviceId}`, {
+                    headers: headers
+                });
+
+                // 3. Xử lý lỗi (như 302 hoặc 401)
+                if (!response.ok) {
+                    // Đây là nơi lỗi "token hết hạn" bị bắt
+                    throw new Error(`Lỗi mạng hoặc xác thực: ${response.status}`);
+                }
+
+                // 4. --- PHẦN SỬA LỖI QUAN TRỌNG ---
+                // Đọc response dưới dạng text TRƯỚC TIÊN
+                const text = await response.text();
+
+                // Nếu text rỗng (backend trả về null/empty), coi như không có review
+                if (!text) {
+                    reviewsList.innerHTML = '<p style="text-align: center; padding: 2rem 0; color: var(--text-light);">Chưa có đánh giá nào cho dịch vụ này.</p>';
+                    return;
+                }
+                
+                // 5. Chỉ khi text có nội dung, mới parse nó
+                console.log("Dữ liệu thô nhận được từ API (text):");
+                console.log(text);
+
+                const reviews = JSON.parse(text);
+                // --- KẾT THÚC PHẦN SỬA LỖI ---
+
+
+                // 6. Render các review
+                if (!reviews || reviews.length === 0) {
+                    reviewsList.innerHTML = '<p style="text-align: center; padding: 2rem 0; color: var(--text-light);">Chưa có đánh giá nào cho dịch vụ này.</p>';
+                    return;
+                }
+
+                reviewsList.innerHTML = reviews.map(review => {
+                    const userName = review.user ? review.user.hoTen : 'Khách hàng ẩn danh';
+                    const avatar = (review.user ? review.user.avatarURL : null) || '/assets/avatar/default-avatar.png';
+                    const date = new Date(review.createdAt).toLocaleDateString('vi-VN');
+                    const stars = renderStars(review.rating);
+                    const comment = review.noiDung ? review.noiDung.replace(/\n/g, '<br>') : 'Khách hàng không để lại nhận xét.';
+
+                    return `
+                    <div class="review-card">
+                        <div class="review-header">
+                            <img src="${avatar}" alt="Avatar" class="review-avatar">
+                            <div class="review-info">
+                                <h4>${userName}</h4>
+                                <span class="review-date">${date}</span>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            ${stars}
+                        </div>
+                        <p class="review-body">
+                            ${comment}
+                        </p>
+                    </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Lỗi tải đánh giá (chi tiết):', error);
+                
+                if (error.message.includes('JSON')) {
+                    // Lỗi này xảy ra nếu text không rỗng nhưng không phải JSON
+                    reviewsList.innerHTML = '<p style="text-align: center; color: red; padding: 2rem 0;">Lỗi: Dữ liệu đánh giá trả về không hợp lệ.</p>';
+                } else {
+                    // Lỗi này là do 302, 401, 500...
+                    reviewsList.innerHTML = '<p style="text-align: center; color: red; padding: 2rem 0;">Đã xảy ra lỗi khi tải danh sách đánh giá.</p>';
+                }
+            }
+        }
+
+
+        // --- KHỞI CHẠY TRANG ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Tải các thành phần chung
+            loadAuthSection();
+            loadFooterServices();
+            setupMobileMenu();
+
+            // 2. Tải nội dung chính của trang
+            loadServiceDetail();
+            
+
+        });
+
+    </script>
+</body>
+</html>

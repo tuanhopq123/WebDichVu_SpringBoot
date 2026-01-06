@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng Ký Tài Khoản</title>
+    <link rel="stylesheet" href="/css/style.css">
+    </head>
+<body>
+    <div id="toast-container"></div> 
+
+    <form id="registerForm">
+        <h2>Đăng Ký</h2>
+        <label for="hoTen">Họ Tên:</label>
+        <input type="text" id="hoTen" name="hoTen" required><br>
+
+        <label for="emailReg">Email:</label>
+        <input type="text" id="emailReg" name="email" required><br>
+
+        <label for="matKhauReg">Mật Khẩu:</label>
+        <input type="password" id="matKhauReg" name="matKhau" required><br>
+
+        <button type="submit">Đăng Ký</button>
+        <p>Đã có tài khoản? <a href="login.html">Đăng nhập ngay!</a></p>
+            
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/oauth2/authorization/google" class="google-btn">
+            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" width="20">
+            Đăng ký bằng Google
+        </a>
+    </div>
+    </form>
+
+    <script>
+        
+        function showToast(message, type) {
+            const container = document.getElementById('toast-container');
+            
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = message;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                
+                setTimeout(() => {
+                    toast.remove();
+                }, 500); // 500ms để chờ hiệu ứng ẩn
+            }, 4000); 
+        }
+
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const hoTen = document.getElementById('hoTen').value;
+            const email = document.getElementById('emailReg').value;
+            const matKhau = document.getElementById('matKhauReg').value;
+
+            const data = { hoTen, email, matKhau };
+            
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.text();
+
+                if (response.ok) {
+                    showToast('Đăng ký thành công! Vui lòng chuyển sang trang Đăng nhập.', 'success');
+                    document.getElementById('registerForm').reset();
+                } else {
+                    // Lỗi 400 Bad Request từ server (ví dụ: email đã tồn tại)
+                    showToast(`Lỗi Đăng ký: ${result}`, 'error');
+                }
+            } catch (error) {
+                showToast('Lỗi kết nối đến Server.', 'error');
+            }
+        });
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('oauth_token');
+    if (token) {
+        localStorage.setItem('jwtToken', token);
+        showToast('Đăng ký bằng Google thành công!', 'success');
+        window.history.replaceState({}, '', '/home.html');
+        setTimeout(() => window.location.href = '/home.html', 1500);
+    }
+});
+    </script>
+</body>
+</html>

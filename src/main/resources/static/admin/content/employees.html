@@ -1,0 +1,289 @@
+<div class="content-header">
+    <h2>Quản Lý Nhân Viên</h2>
+    </div>
+
+    <!-- THANH LỌC VÀ TÌM KIẾM MỚI -->
+
+<div class="filter-bar" 
+     style="margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+
+    <input type="text" 
+           id="employee-search-input" 
+           placeholder="Tìm theo tên, email, SĐT..." 
+           style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                  flex-grow: 1; min-width: 250px;">
+
+    <select id="employee-sort-select" 
+            style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        <option value="az">Tên A → Z</option>
+        <option value="za">Tên Z → A</option>
+    </select>
+
+    <select id="employee-status-filter" 
+            style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        <option value="">Lọc Trạng Thái</option>
+        <option value="RANH">Rảnh</option>
+        <option value="BAN">Bận</option>
+    </select>
+    
+</div>
+
+<!-- KẾT THÚC THANH LỌC -->
+
+<div class="content-body">
+    <table class="data-table" id="employees-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Họ Tên</th>
+                <th>Email</th>
+                <th>Số Điện Thoại</th>
+                <th>Trạng Thái</th>
+                <th>Dịch Vụ Đảm Nhận</th>
+                <th>Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            </tbody>
+    </table>
+</div>
+
+<!-- PHÂN TRANG MỚI -->
+<div class="pagination" style="margin-top: 20px; text-align: center;">
+    <button class="btn btn-secondary" id="prev-page-btn" disabled>Trước</button>
+    <span id="page-info" style="margin: 0 15px;">Trang 1 / 1</span>
+    <button class="btn btn-secondary" id="next-page-btn" disabled>Sau</button>
+</div>
+<!-- KẾT THÚC PHÂN TRANG -->
+
+
+<div class="modal" id="employee-modal" style="display: none; z-index: 1001;">
+    <div class="modal-content large-modal"> <span class="close-btn" data-close-modal="employee-modal">&times;</span>
+        <h3 id="employee-modal-title">Chỉnh Sửa Nhân Viên</h3>
+        
+        <form id="employee-form">
+            <input type="hidden" id="employee-id">
+
+            <div class="form-row">
+                <div class="form-group half-width">
+                    <label for="employee-name">Họ Tên:</label>
+                    <input type="text" id="employee-name" name="hoTen" readonly> </div>
+                <div class="form-group half-width">
+                    <label for="employee-email">Email:</label>
+                    <input type="email" id="employee-email" name="email" readonly> </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group half-width">
+                    <label for="employee-sdt">Số Điện Thoại:</label>
+                    <input type="tel" id="employee-sdt" name="sdt" placeholder="Nhập số điện thoại...">
+                </div>
+                <div class="form-group half-width">
+                    <label for="employee-status">Trạng Thái:</label>
+                    <select id="employee-status" name="trangThaiNhanVien">
+                        <option value="RANH">Rảnh</option>
+                        <option value="BAN">Bận</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Dịch Vụ Đảm Nhận:</label>
+                <div id="assigned-services-list" class="assigned-items-list">
+                    </div>
+            </div>
+
+            <div class="form-group" style="position: relative;">
+                <label for="service-search-input">Thêm Dịch Vụ:</label>
+                <input type="text" id="service-search-input" placeholder="Gõ để tìm dịch vụ (không dấu, không số)...">
+                
+                <div id="service-search-results" class="search-results-list">
+                    </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-4">Lưu Thay Đổi</button>
+        </form>
+    </div>
+</div>
+
+<style>
+        /* === DÁN TOÀN BỘ CSS BẠN CUNG CẤP === */
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .data-table th, .data-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .data-table th {
+            background-color: #007bff;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+        .data-table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+        .btn {
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+        .btn-success-lift {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.4);
+        }
+        .btn-success-lift:hover {
+            background-color: #218838;
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.6);
+            transform: translateY(-1px);
+        }
+        .btn-info { background-color: #17a2b8; color: white; }
+        .btn-danger { background-color: #dc3545; color: white; }
+        .btn-primary { background-color: #007bff; color: white; }
+        .btn-secondary { background-color: #6c757d; color: white; }
+        .mt-4 { margin-top: 1.5rem; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal[style*="flex"] { visibility: visible !important; }
+        .modal-content {
+            background-color: #fefefe;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+            animation: animatetop 0.4s;
+        }
+        @keyframes animatetop {
+            from {top: -300px; opacity: 0}
+            to {top: 0; opacity: 1}
+        }
+        .close-btn {
+            position: absolute; top: 10px; right: 20px;
+            color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer;
+        }
+        .close-btn:hover { color: #000; }
+
+        /* === THÊM CSS CHO FORM === */
+        .form-row { display: flex; gap: 15px; margin-bottom: 15px; }
+        .form-group { flex: 1; }
+        .form-group.half-width { flex: 1; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
+        }
+        .assigned-items-list {
+            max-height: 120px; overflow-y: auto; border: 1px solid #ddd; padding: 8px; border-radius: 4px;
+            margin-bottom: 10px; background: #f9f9f9;
+        }
+        .assigned-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 6px 8px; background: white; margin: 4px 0; border-radius: 4px; font-size: 14px;
+        }
+        .search-results-list {
+            max-height: 150px; overflow-y: auto; border: 1px solid #ccc; background: white;
+            position: absolute; width: 100%; z-index: 10; display: none; border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .search-result-item {
+            padding: 10px; cursor: pointer; border-bottom: 1px solid #eee;
+        }
+        .search-result-item:hover { background-color: #f0f8ff; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .badge-success { background-color: #28a745; color: white; }
+        .badge-danger { background-color: #dc3545; color: white; }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .form-row { flex-direction: column; }
+            .form-group.half-width { width: 100%; }
+        }
+        /* ===== TÌM KIẾM DỊCH VỤ TRONG MODAL ===== */
+#service-search-results {
+    position: absolute;
+    top: 100%; /* Hiển thị ngay dưới thẻ input cha */
+    left: 0;
+    width: 100%;
+    max-height: 180px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 100;
+    display: none; /* Bị ẩn theo mặc định */
+}
+
+#service-search-results:not(:empty) {
+    display: block; 
+}
+
+.service-result-item {
+    padding: 10px 12px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.service-result-item:hover {
+    background-color: #f0f8ff;
+}
+
+.service-result-item.disabled {
+    color: #999;
+    cursor: not-allowed;
+    font-style: italic;
+}
+
+.service-result-item:last-child {
+    border-bottom: none;
+}
+.filter-bar-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 10px; /* Khoảng cách đến thanh lọc */
+}
+#employee-count-display {
+    font-weight: 600;
+    font-size: 16px;
+    color: #333;
+}
+    </style>

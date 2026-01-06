@@ -1,0 +1,333 @@
+<div class="content-header">
+    <h2>Quản Lý Dịch Vụ</h2>
+    <button class="btn btn-success-lift" id="add-service-btn">
+        <i class="fas fa-plus"></i> Thêm Dịch Vụ Mới
+    </button>
+</div>
+
+<div class="filter-bar" style="margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+    <input 
+        type="text" 
+        id="service-search" 
+        placeholder="Tìm kiếm dịch vụ (không dấu)..." 
+        style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; flex: 1; min-width: 200px;"
+    >
+    <select id="sort-services" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        <option value="">Sắp xếp</option>
+        <option value="az">A-Z</option>
+        <option value="za">Z-A</option>
+        <option value="price-asc">Giá thấp-cao</option>
+        <option value="price-desc">Giá cao-thấp</option>
+    </select>
+</div>
+
+<div class="content-body">
+    <table class="data-table" id="services-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Ảnh</th>
+                <th>Tên Dịch Vụ</th>
+                <th>Giá Cơ Bản</th>
+                <th>Thời Gian HT</th>
+                <th>Danh Mục</th>
+                <th>Mô Tả</th>
+                <th>Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dữ liệu dịch vụ sẽ được chèn vào đây bằng JS -->
+        </tbody>
+    </table>
+        <div class="pagination" style="margin-top: 20px; text-align: center;">
+        <button class="btn btn-secondary" id="prev-page-btn" disabled>Trước</button>
+        <span id="page-info">Trang 1 / 1</span>
+        <button class="btn btn-secondary" id="next-page-btn" disabled>Sau</button>
+    </div>
+</div>
+
+<!-- Modal Thêm/Sửa Dịch Vụ -->
+<div class="modal" id="service-modal" style="display: none; z-index: 1001;">
+    <div class="modal-content">
+        <span class="close-btn" data-close-modal="service-modal">&times;</span>
+        <h3 id="modal-title">Thêm Dịch Vụ Mới</h3>
+        <form id="service-form" enctype="multipart/form-data">
+            <input type="hidden" id="service-id">
+
+            <label for="categoryId">Danh Mục:</label>
+            <select id="categoryId" name="categoryId" required>
+                <option value="">Chọn danh mục</option>
+                <!-- Danh mục sẽ được load động bằng JS -->
+            </select>
+
+            <label for="tenDichVu">Tên Dịch Vụ:</label>
+            <input type="text" id="tenDichVu" name="tenDichVu" required>
+
+            <label for="giaCoBan">Giá Cơ Bản (VND):</label>
+            <input type="number" id="giaCoBan" name="giaCoBan" required min="1000">
+
+            <label for="thoiGianHoanThanh">Thời Gian Hoàn Thành (Theo phút):</label>
+            <input type="number" id="thoiGianHoanThanh" name="thoiGianHoanThanh">
+
+            <label for="imageFile">Hình Ảnh Đại Diện:</label>
+            <input type="file" id="imageFile" name="imageFile" accept="image/*">
+            <div id="image-preview" style="margin-top: 10px;">
+                <img id="preview-img" src="" alt="Ảnh xem trước" style="display: none; max-width: 100px; max-height: 100px; object-fit: cover; border-radius: 4px;">
+            </div>
+
+            <label for="moTa">Mô Tả:</label>
+            <textarea id="moTa" name="moTa" rows="3"></textarea>
+
+            <button type="submit" class="btn btn-primary mt-4" id="submit-service-btn">Lưu Dịch Vụ</button>
+        </form>
+    </div>
+</div>
+
+<!-- Custom Confirmation Modal -->
+<div class="modal" id="custom-confirm-modal">
+    <div class="modal-content small-modal">
+        <h3 id="confirm-title">Xác Nhận Xóa</h3>
+        <p id="confirm-message">Bạn có chắc chắn muốn thực hiện hành động này không?</p>
+        <div class="modal-actions">
+            <button class="btn btn-danger" id="confirm-yes-btn">Đồng ý Xóa</button>
+            <button class="btn btn-secondary" id="confirm-no-btn">Hủy bỏ</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Mô Tả -->
+<div class="modal" id="description-modal" style="display: none; z-index: 1001;">
+    <div class="modal-content">
+        <span class="close-btn" id="description-close-btn">&times;</span>
+        <h3 id="description-title" style="text-align: center;" >Chi Tiết Mô Tả</h3>
+        <p id="description-content" style="margin: 20px 0; white-space: pre-wrap;"></p>
+    </div>
+</div>
+
+<style>
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.data-table th, .data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+.data-table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+.data-table tbody tr:hover {
+    background-color: #f5f5f5;
+}
+.btn {
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 12px;
+    margin-right: 5px;
+}
+.btn-success-lift {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.4);
+}
+.btn-success-lift:hover {
+    background-color: #218838;
+    box-shadow: 0 6px 15px rgba(40, 167, 69, 0.6);
+    transform: translateY(-1px);
+}
+.btn-success-lift i {
+    pointer-events: none;
+}
+.btn-info {
+    background-color: #17a2b8;
+    color: white;
+}
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+.mt-4 {
+    margin-top: 1.5rem;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+}
+.modal[style*="display: flex"] {
+    visibility: visible !important;
+}
+.modal-content {
+    background-color: #fefefe;
+    /* Giảm padding để tiết kiệm không gian xung quanh */
+    padding: 20px; /* Giảm từ 30px xuống 20px */
+    border-radius: 10px;
+    width: 90%;
+    /* Giảm Max-Width nếu bạn muốn nó nhỏ hơn chiều ngang */
+    max-width: 500px; /* (Tùy chọn) Giảm từ 600px xuống 500px */
+    
+    /* Thiết lập chiều cao tối đa và bật cuộn dọc */
+    max-height: 90vh; /* Giới hạn chiều cao tối đa là 90% chiều cao viewport */
+    overflow-y: auto; /* Quan trọng: Cho phép nội dung bên trong cuộn */
+    
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+}
+.modal-content.small-modal {
+    max-width: 400px;
+    text-align: center;
+}
+@keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
+}
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+.close-btn:hover,
+.close-btn:focus {
+    color: #000;
+    text-decoration: none;
+}
+#category-form input[type="text"],
+#category-form textarea,
+#service-form input[type="text"],
+#service-form input[type="number"],
+#service-form select,
+#service-form textarea {
+    width: 100%;
+    /* Giảm Padding để làm input nhỏ lại */
+    padding: 8px; /* Giảm từ 10px xuống 8px */
+    /* Giảm Margin-bottom để các trường gần nhau hơn */
+    margin: 4px 0 10px 0; /* Giảm khoảng cách trên và dưới */
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Đảm bảo các label cũng không chiếm quá nhiều không gian */
+.modal-content label {
+    margin-top: 5px; /* Giảm khoảng cách trên label */
+    display: block; /* Đảm bảo label ở dòng riêng */
+    font-weight: 600; /* Có thể làm chữ đậm hơn để dễ nhìn */
+    font-size: 0.9em; /* (Tùy chọn) Giảm kích thước chữ một chút */
+}
+#service-form button[type="submit"] {
+    margin-top: 15px !important; /* Đảm bảo khoảng cách hợp lý */
+    padding: 10px 20px;
+    /* Thêm các style khác cho nút */
+}
+.modal-actions {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    margin-top: 20px;
+}
+.modal-actions .btn {
+    flex: 1;
+}
+#detail-description {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+}
+.text-indigo-600 {
+    color: #4f46e5; /* Indigo 600 */
+}
+.hover\:text-indigo-800:hover {
+    color: #3730a3; /* Indigo 800 */
+}
+.bg-indigo-50\/50 {
+    background-color: rgba(224, 231, 255, 0.5); /* Indigo 50 with 50% opacity */
+}
+.p-1 {
+    padding: 4px;
+}
+.rounded-full {
+    border-radius: 9999px;
+}
+.focus\:outline-none:focus {
+    outline: none;
+}
+#image-preview {
+    margin: 10px 0;
+}
+#preview-img {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+.description-icon {
+    background-color: #17a2b8;   /* màu nền xanh */
+    border: none;
+    border-radius: 17%;          /* bo tròn */
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.description-icon i {
+    color: #fff;                 /* icon màu trắng */
+    font-size: 16px;
+}
+
+/* Hiệu ứng hover */
+.description-icon:hover {
+    background-color: #138496;   /* màu đậm hơn khi hover */
+}
+
+</style>

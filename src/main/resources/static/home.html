@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dịch vụ Tại Nhà - Đặt dịch vụ tại nhà chỉ với 1 chạm</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Icons&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="/css/style_index.css" rel="stylesheet">
+    <!-- THÊM CHATBOT CSS -->
+    <link href="/css/chatbot.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Success Alert -->
+    <div id="success-alert" class="alert success-alert" style="display: none;">
+        <div class="alert-content">
+            <i class="fas fa-check-circle"></i>
+            <span id="success-message"></span>
+        </div>
+        <button class="close-alert"><i class="fas fa-times"></i></button>
+    </div>
+
+    <!-- HEADER -->
+    <header class="main-header">
+        <div class="container header-container">
+            <a href="/home.html" class="logo">
+                <img src="/assets/logo/Ho_Anh_Tuan.png" alt="Logo" style="height: 50px; border-radius: 17px;">
+                <span class="logo-text">Dịch vụ Tại Nhà</span>
+            </a>
+
+            <nav class="main-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="/index.html" class="nav-link active">Trang chủ</a></li>
+                    <li class="nav-item"><a href="/introduce.html" class="nav-link">Giới thiệu</a></li>
+                    <li class="nav-item"><a href="/services.html" class="nav-link">Dịch vụ</a></li>
+                    <li class="nav-item"><a href="/service_price_list.html" class="nav-link">Bảng giá</a></li>
+                    <li class="nav-item"><a href="/contact.html" class="nav-link">Liên hệ</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <div id="auth-section"></div>
+                <button class="hamburger" aria-label="Menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Đặt dịch vụ tại nhà chỉ với 1 chạm</h1>
+                <p class="hero-subtitle">Nhanh chóng - Uy tín - Phục vụ 24/7</p>
+                <div class="hero-buttons">
+                    <a href="/services.html" class="btn btn-primary btn-lg">
+                        <i class="material-icons">event</i> Đặt lịch ngay
+                    </a>
+                    <a href="/services.html" class="btn btn-light btn-lg">
+                        <i class="material-icons">search</i> Xem các dịch vụ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES FEATURE SECTION -->
+    <section class="services-feature">
+        <div class="container">
+            <div class="feature-boxes">
+                <div class="feature-box">
+                    <div class="feature-icon"><i class="fas fa-calendar-check"></i></div>
+                    <h3>Đặt lịch dễ dàng</h3>
+                    <p>Chọn dịch vụ và thời gian một cách nhanh chóng, tiện lợi</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon"><i class="fas fa-user-tie"></i></div>
+                    <h3>Nhân viên chuyên nghiệp</h3>
+                    <p>Đội ngũ nhân viên được đào tạo bài bản, nhiều kinh nghiệm</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Bảo hành dịch vụ</h3>
+                    <p>Cam kết chất lượng với chính sách bảo hành rõ ràng</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon"><i class="fas fa-thumbs-up"></i></div>
+                    <h3>Khách hàng hài lòng</h3>
+                    <p>Tỷ lệ hài lòng lên đến 98% từ hơn 10,000 khách hàng</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section class="services">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Khám phá dịch vụ</span>
+                <h2 class="section-title">Các dịch vụ nổi bật</h2>
+                <p class="section-description">Lựa chọn đa dạng các dịch vụ chất lượng cao, đáp ứng mọi nhu cầu của bạn</p>
+            </div>
+            <div class="services-grid" id="services-grid"></div>
+            <div class="text-center mt-4">
+                <a href="/services.html" class="btn btn-outline-primary btn-lg">Xem tất cả dịch vụ</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Quy trình đặt lịch</span>
+                <h2 class="section-title">4 bước đơn giản</h2>
+                <p class="section-description">Đặt lịch dịch vụ tại nhà dễ dàng chỉ với vài thao tác đơn giản</p>
+            </div>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-icon"><i class="material-icons">list_alt</i><div class="step-number">1</div></div>
+                    <h3 class="step-title">Chọn dịch vụ</h3>
+                    <p class="step-description">Lựa chọn dịch vụ phù hợp với nhu cầu của bạn từ danh sách đa dạng</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="material-icons">schedule</i><div class="step-number">2</div></div>
+                    <h3 class="step-title">Chọn thời gian</h3>
+                    <p class="step-description">Đặt lịch theo ngày giờ thuận tiện cho bạn, linh hoạt 24/7</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="material-icons">person</i><div class="step-number">3</div></div>
+                    <h3 class="step-title">Nhập thông tin</h3>
+                    <p class="step-description">Cung cấp thông tin địa chỉ và yêu cầu cụ thể của bạn</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="material-icons">check_circle</i><div class="step-number">4</div></div>
+                    <h3 class="step-title">Xác nhận</h3>
+                    <p class="step-description">Xác nhận đặt lịch và chờ nhân viên đến phục vụ tận nơi</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Phản hồi từ khách hàng</span>
+                <h2 class="section-title">Khách hàng nói gì về chúng tôi</h2>
+                <p class="section-description">Những đánh giá chân thực từ khách hàng đã sử dụng dịch vụ</p>
+            </div>
+            <div class="testimonial-slider" id="testimonialSlider"></div>
+            <div class="testimonial-controls">
+                <button id="prevTestimonial" class="testimonial-control-btn" title="Lùi lại">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button id="nextTestimonial" class="testimonial-control-btn" aria-label="Chuyển tiếp">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- PARTNERS -->
+    <section class="partners">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Đối tác</span>
+                <h2 class="section-title">Đối tác của chúng tôi</h2>
+            </div>
+            <div class="partner-logos">
+                <div class="partner-logo"><img src="/assets/logo/tiktok.png" alt="TikTok"></div>
+                <div class="partner-logo"><img src="/assets/logo/fb.png" alt="Facebook"></div>
+                <div class="partner-logo"><img src="/assets/logo/zalo.png" alt="Zalo"></div>
+                <div class="partner-logo"><img src="/assets/logo/dc.png" alt="Discord"></div>
+                <div class="partner-logo"><img src="/assets/logo/fpt.png" alt="FPT"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT FORM -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <div class="section-header text-left">
+                        <span class="section-subtitle">Liên hệ</span>
+                        <h2 class="section-title">Liên hệ với chúng tôi</h2>
+                        <p class="section-description">Hãy để lại thông tin để nhận tư vấn và ưu đãi đặc biệt từ chúng tôi</p>
+                    </div>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="contact-text">
+                                <h4>Địa chỉ</h4>
+                                <p>142, Linh Trung, Thủ Đức, TP. Hồ Chí Minh</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                            <div class="contact-text">
+                                <h4>Điện thoại</h4>
+                                <p>0783 998 046</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="contact-text">
+                                <h4>Email</h4>
+                                <p>tuanhopq2019@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-clock"></i></div>
+                            <div class="contact-text">
+                                <h4>Giờ làm việc</h4>
+                                <p>8:00 - 20:00, Thứ 2 - Chủ nhật</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Họ và tên</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Tiêu đề</label>
+                            <input type="text" id="subject" name="subject" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Nội dung</label>
+                            <textarea id="message" name="message" class="form-control" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Gửi tin nhắn</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="main-footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-widget about-widget">
+                        <a href="/index.html" class="footer-logo">
+                            <img src="/assets/logo/Ho_Anh_Tuan.png" alt="Logo">
+                            <span>Dịch vụ Tại Nhà</span>
+                        </a>
+                        <p>Cung cấp các dịch vụ tại nhà chất lượng cao, uy tín và chuyên nghiệp. Hãy để chúng tôi giúp cuộc sống của bạn dễ dàng hơn.</p>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/ten.trang.cua.ban" target="_blank" class="social-link facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/ten_instagram" target="_blank" class="social-link instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.tiktok.com/@ten_t  target="_blank" class="social-link tiktok"><i class="fab fa-tiktok"></i></a>
+                            <a href="https://www.youtube.com/channel/ma_kenh_cua_ban" target="_blank" class="social-link youtube"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-widget">
+                        <h3 class="widget-title">Điều hướng</h3>
+                        <ul class="widget-links">
+                            <li><a href="/index.html">Trang chủ</a></li>
+                            <li><a href="/introduce.html">Giới thiệu</a></li>
+                            <li><a href="/services.html">Dịch vụ</a></li>
+                            <li><a href="/service_price_list.html">Bảng giá</a></li>
+                            <li><a href="/contact.html">Liên hệ</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-widget">
+                        <h3 class="widget-title">Dịch vụ</h3>
+                        <ul class="widget-links" id="footer-services"></ul>
+                    </div>
+                    <div class="footer-widget">
+                        <h3 class="widget-title">Hỗ trợ</h3>
+                        <ul class="widget-links">
+                            <li><a href="/terms.html">Điều khoản sử dụng</a></li>
+                            <li><a href="/privacy.html">Chính sách bảo mật</a></li>
+                            <li><a href="/faq.html">Câu hỏi thường gặp</a></li>
+                            <li><a href="/return_policy.html">Chính sách hoàn tiền</a></li>
+                            <li><a href="/support.html">Trung tâm trợ giúp</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 Dịch vụ Tại Nhà. All rights reserved. Thiết kế bởi Hồ Anh Tuấn</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- BACK TO TOP -->
+    <button id="backToTop" class="back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- CHAT SUPPORT -->
+    <div class="chat-support">
+        <div class="chat-icon" id="chatIcon">
+            <i class="fas fa-comments"></i>
+            <span class="chat-notification" style="display: none;"></span>
+        </div>
+        <div class="chat-box" id="chatBox">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <div class="chat-avatar"><i class="fas fa-headset"></i></div>
+                    <div>
+                        <h3>Hỗ trợ trực tuyến</h3>
+                        <span class="online-status"><i class="fas fa-circle"></i> Đang trực tuyến</span>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <button id="minimizeChat"><i class="fas fa-minus"></i></button>
+                    <button id="closeChat"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <!-- Tin nhắn chào sẽ được thêm bằng JS -->
+            </div>
+            <div class="chat-input">
+                <input type="text" id="messageInput" placeholder="Nhập tin nhắn..." autocomplete="off">
+                <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/chatbot.js"></script>
+    <script src="/js/notification.js?v=1.3"></script>
+
+    <script>
+        // Utility: thời gian trôi qua
+        function timeElapsedString(date) {
+            const now = new Date();
+            const seconds = Math.floor((now - new Date(date)) / 1000);
+            if (seconds < 60) return `${seconds} giây trước`;
+            const minutes = Math.floor(seconds / 60);
+            if (minutes < 60) return `${minutes} phút trước`;
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `${hours} giờ trước`;
+            const days = Math.floor(hours / 24);
+            return `${days} ngày trước`;
+        }
+
+        // Load Auth Section
+        function loadAuthSection() {
+            const token = localStorage.getItem('jwtToken');
+            const authSection = document.getElementById('auth-section');
+
+            if (token) {
+                fetch('/api/users/me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
+                .then(res => {
+                    if (!res.ok) throw new Error(res.status);
+                    return res.json();
+                })
+                .then(user => {
+                    const avatar = user.avatarURL || '/assets/avatar/default-avatar.png';
+                    const displayName = user.hoTen || 'Người dùng';
+                    authSection.innerHTML = `
+                        <div class="header-actions">
+                            <div class="notification-container">
+                                <div class="notification-icon">
+                                    <i class="fas fa-bell"></i>
+                                    <span class="notification-badge" style="display: none;"></span>
+                                </div>
+                                <div class="notification-dropdown">
+                                    <div class="notification-header">
+                                        <h3>Thông báo</h3>
+                                        <button class="mark-all-read">Đánh dấu tất cả đã đọc</button>
+                                    </div>
+                                    <div class="notification-list" id="notification-list"></div>
+                                    <div class="notification-footer">
+                                        <a href="/notifications.html">Xem tất cả thông báo</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="user-menu-container">
+                                <div class="user-menu-trigger">
+                                    <img src="${avatar}" alt="Avatar" class="user-avatar">
+                                    <span class="user-name">${displayName}</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="user-dropdown">
+                                    <a href="/account.html" class="user-dropdown-item">
+                                        <i class="fas fa-user"></i> Hồ sơ cá nhân
+                                    </a>
+                                    <a href="/my_bookings.html" class="user-dropdown-item">
+                                        <i class="fas fa-calendar-check"></i> Đơn đặt dịch vụ
+                                    </a>
+                                    <a href="/cart.html" class="user-dropdown-item"><i class="fas fa-shopping-cart"></i> Giỏ hàng của tôi</a>
+                                    <a href="/change_password.html" class="user-dropdown-item">
+                                        <i class="fas fa-key"></i> Đổi mật khẩu
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a href="#" class="user-dropdown-item logout" onclick="logout()">
+                                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    const initialCount = localStorage.getItem('unreadNotificationCount') || 0;
+                    updateBadgeCount(initialCount);
+                    loadNotifications(token);
+                    setupNotificationClick();
+                })
+                .catch(err => {
+                    if (err.message === '401') {
+                        localStorage.removeItem('jwtToken');
+                        localStorage.removeItem('userRole');
+                    }
+                    authSection.innerHTML = `
+                        <div class="auth-buttons">
+                            <a href="/login.html" class="btn btn-outline">Đăng nhập</a>
+                            <a href="/register.html" class="btn btn-primary">Đăng ký</a>
+                        </div>
+                    `;
+                });
+            } else {
+                authSection.innerHTML = `
+                    <div class="auth-buttons">
+                        <a href="/login.html" class="btn btn-outline">Đăng nhập</a>
+                        <a href="/register.html" class="btn btn-primary">Đăng ký</a>
+                    </div>
+                `;
+            }
+        }
+
+        // Load Notifications
+        // function loadNotifications(token) {
+        //     fetch('/api/notifications', {
+        //         headers: { 'Authorization': `Bearer ${token}` }
+        //     })
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         const list = document.getElementById('notification-list');
+        //         const badge = document.querySelector('.notification-badge');
+        //         const unreadCount = data.filter(n => !n.isRead).length;
+        //         badge.textContent = unreadCount;
+        //         badge.style.display = unreadCount > 0 ? 'flex' : 'none';
+
+        //         list.innerHTML = data.length > 0 ? data.map(n => `
+        //             <div class="notification-item ${n.isRead ? '' : 'unread'}">
+        //                 <div class="notification-icon ${n.type}">
+        //                     <i class="fas fa-${n.type === 'admin_message' ? 'envelope' : 'shopping-bag'}"></i>
+        //                 </div>
+        //                 <div class="notification-content">
+        //                     <p>${n.message}</p>
+        //                     <span class="notification-time">${timeElapsedString(n.createdAt)}</span>
+        //                 </div>
+        //             </div>
+        //         `).join('') : '<div class="empty-notifications"><p>Bạn không có thông báo mới</p></div>';
+        //     })
+        //     .catch(() => {});
+        // }
+
+        // Load Services
+        function loadServices() {
+            fetch('/api/services?limit=6')
+                .then(r => r.json())
+                .then(services => {
+                    document.getElementById('services-grid').innerHTML = services.map(s => `
+                        <div class="service-card">
+                            <div class="service-image">
+                                <img src="${s.imageUrl || '/assets/img/service-default.jpg'}" alt="${s.title}">
+                                <div class="service-category">${s.categoryName}</div>
+                            </div>
+                            <div class="service-content">
+                                <h3 class="service-title">${s.title}</h3>
+                                <div class="service-meta">
+                                    <span class="service-price">${new Intl.NumberFormat('vi-VN').format(s.price)} đ</span>
+                                    <span class="service-duration"><i class="far fa-clock"></i> ${s.duration} phút</span>
+                                </div>
+                                <p class="service-description">${s.description.substring(0, 100)}...</p>
+                                <div class="service-actions">
+                                    <a href="/service_detail.html?id=${s.id}" class="btn btn-outline">Chi tiết</a>
+                                    <a href="/booking.html?service_id=${s.id}" class="btn btn-primary">Đặt lịch</a>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                });
+
+            fetch('/api/services?limit=5')
+                .then(r => r.json())
+                .then(services => {
+                    document.getElementById('footer-services').innerHTML = services.map(s => `
+                        <li><a href="/service_detail.html?id=${s.id}">${s.title}</a></li>
+                    `).join('');
+                });
+        }
+
+        // Load Testimonials
+        function loadTestimonials() {
+            fetch('/api/reviews?ratingMin=4&limit=5')
+                .then(r => r.json())
+                .then(reviews => {
+                    const container = document.getElementById('testimonialSlider');
+                    if (reviews.length > 0) {
+                        container.innerHTML = reviews.map(r => `
+                            <div class="testimonial-card">
+                                <div class="testimonial-header">
+                                    <img src="${r.userAvatar || '/assets/logo/avatar.png'}" alt="${r.userName}" class="testimonial-avatar">
+                                    <div class="testimonial-info">
+                                        <h4 class="testimonial-name">${r.userName || 'Khách hàng'}</h4>
+                                        <p class="testimonial-service">${r.serviceTitle}</p>
+                                    </div>
+                                </div>
+                                <div class="testimonial-rating">
+                                    ${[...Array(5)].map((_, i) => 
+                                        i < Math.floor(r.rating) ? '<i class="fas fa-star"></i>' :
+                                        i < r.rating ? '<i class="fas fa-star-half-alt"></i>' : '<i class="far fa-star"></i>'
+                                    ).join('')}
+                                </div>
+                                <p class="testimonial-text">"${r.comment}"</p>
+                                <p class="testimonial-date">${new Date(r.createdAt).toLocaleDateString('vi-VN')}</p>
+                            </div>
+                        `).join('');
+                    } else {
+                        container.innerHTML = `<!-- Dữ liệu mẫu nếu API rỗng -->`;
+                    }
+                });
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('jwtToken');
+            localStorage.removeItem('userRole');
+            window.location.href = '/login.html';
+        }
+
+        // Contact Form
+        document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value
+            };
+            try {
+                const res = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (res.ok) {
+                    e.target.reset();
+                    showSuccess('Tin nhắn đã được gửi thành công!');
+                }
+            } catch {
+                showSuccess('Lỗi gửi tin nhắn. Vui lòng thử lại.');
+            }
+        });
+
+        // Show Success
+        function showSuccess(msg) {
+            const alert = document.getElementById('success-alert');
+            document.getElementById('success-message').textContent = msg;
+            alert.style.display = 'flex';
+            setTimeout(() => alert.style.display = 'none', 4000);
+        }
+
+        // Close Alert
+        document.querySelector('.close-alert')?.addEventListener('click', () => {
+            document.getElementById('success-alert').style.display = 'none';
+        });
+
+        // DOM Ready
+        document.addEventListener('DOMContentLoaded', () => {
+            // OAuth2 Google Login
+            const params = new URLSearchParams(location.search);
+            const token = params.get('oauth_token');
+            if (token) {
+                localStorage.setItem('jwtToken', token);
+                history.replaceState({}, '', '/home.html');
+            }
+
+            // Khởi tạo tất cả
+            loadAuthSection();
+            loadServices();
+            loadTestimonials();
+            // initChatbot() được gọi từ chatbot.js
+        });
+    </script>
+</body>
+</html>

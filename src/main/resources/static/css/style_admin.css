@@ -1,0 +1,246 @@
+/* style_admin.css */
+
+:root {
+    --sidebar-width: 250px;
+    --primary-color: #ffcc00; /* Vàng */
+    --accent-color: #28a745; /* Xanh lá */
+    --text-color: #333;
+    --bg-color: #f4f7f6;
+    --sidebar-bg: #2c3e50; /* Xanh đen */
+    --sidebar-hover: #34495e;
+}
+
+/* Reset và Typography */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--bg-color);
+    margin: 0;
+    padding: 0;
+    display: flex; /* Bố cục chính dùng Flexbox */
+    height: 100vh;      /* <-- THÊM DÒNG NÀY (Khóa chiều cao) */
+    overflow: hidden;   /* <-- THÊM DÒNG NÀY (Tắt cuộn cấp body) */
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: var(--sidebar-width);
+    flex-shrink: 0; /* Ngăn sidebar co lại */
+    background-color: var(--sidebar-bg);
+    color: white;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    height: 100vh;      /* Khóa chiều cao 100% */
+    overflow-y: auto;   /* Tự cuộn nếu menu quá dài */
+}
+
+.sidebar-header {
+    padding: 0 20px 20px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.logo img {
+    margin-right: 10px;
+}
+
+.sidebar-menu {
+    flex-grow: 1;
+    padding: 20px 0;
+}
+
+.menu-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 10px 20px 5px 20px;
+    margin-top: 15px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #ecf0f1;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+    position: relative;
+}
+
+.menu-item:hover, .menu-item.active {
+    background-color: var(--sidebar-hover);
+    color: var(--primary-color);
+}
+
+.menu-item i {
+    margin-right: 15px;
+    font-size: 1.1rem;
+}
+
+.badge {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: auto;
+}
+
+.nav-divider {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 10px 20px;
+}
+
+.sidebar-footer {
+    padding: 20px;
+    text-align: center;
+    margin-top: auto; /* Đẩy footer xuống dưới */
+}
+
+/* Main Content Styling */
+.main-content {
+    flex-grow: 1; /* Chiếm hết không gian còn lại */
+    /* THÊM 3 DÒNG NÀY */
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Khóa chiều cao 100% */
+    padding: 0 20px 20px 20px; 
+    box-sizing: border-box; /* Đảm bảo padding không phá vỡ layout */
+}
+
+/* Header (Top Nav) */
+.header {
+    background: #ffffff;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.greeting {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.greeting span {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.btn-accent {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+.btn-accent:hover {
+    background-color: #1e7e34;
+}
+
+/* Dynamic Content Area */
+#dynamic-content {
+    background: #ffffff;
+    overflow-y: auto;
+    padding: 20px;
+    border-radius: 8px;
+    flex-grow: 1;         /* Lấp đầy không gian dọc còn lại */
+    overflow-y: auto;     /* BẬT CUỘN CHỈ CHO KHU VỰC NÀY */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Scroll đẹp cho nội dung */
+#dynamic-content::-webkit-scrollbar {
+    width: 8px;
+}
+#dynamic-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+#dynamic-content::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.3);
+    border-radius: 4px;
+}
+#dynamic-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,0,0,0.5);
+}
+
+/* Toast (Cần copy từ style.css chung) */
+#toast-container {
+    position: fixed; 
+    top: 20px; 
+    right: 20px; 
+    z-index: 9999; 
+    pointer-events: none; 
+}
+
+.toast {
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    opacity: 0; 
+    transition: opacity 0.5s, transform 0.5s;
+    transform: translateX(100%); 
+    pointer-events: auto; 
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(0); 
+}
+
+.toast.success {
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 5px solid #28a745;
+}
+
+.toast.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left: 5px solid #dc3545;
+}
+.view-content-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    background-color: #f1f3f9;
+    color: #4e73df;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.view-content-icon:hover {
+    background-color: #4e73df;
+    color: white;
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(78, 115, 223, 0.2);
+}
+
+.view-content-icon:hover span {
+    color: white !important;
+}
+
+.view-content-icon i {
+    font-size: 14px;
+}

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ Hàng | Dịch Vụ Tại Nhà</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style_cart.css" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container header-container">
+            <a href="/home.html" class="logo">
+                <img src="/assets/logo/Ho_Anh_Tuan.png" alt="Logo" style="height: 50px; border-radius: 17px;">
+                <span class="logo-text">Dịch Vụ Tại Nhà</span>
+            </a>
+            <nav class="main-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="/home.html" class="nav-link">Trang chủ</a></li>
+                    <li class="nav-item"><a href="/introduce.html" class="nav-link">Giới thiệu</a></li>
+                    <li class="nav-item"><a href="/services.html" class="nav-link active">Dịch vụ</a></li>
+                    <li class="nav-item"><a href="/service_price_list.html" class="nav-link">Bảng giá</a></li>
+                    <li class="nav-item"><a href="/contact.html" class="nav-link">Liên hệ</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">              
+                <div id="auth-section"></div>
+                <button class="hamburger" aria-label="Menu">
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="/home.html"><i class="fas fa-home"></i> Trang chủ</a>
+                <span class="separator"><i class="fas fa-angle-right"></i></span>
+                <span class="current-page">Giỏ hàng</span>
+            </div>
+
+            <!-- Cart Container -->
+            <div class="cart-container">
+                <div class="cart-header">
+                    <h1><i class="fas fa-shopping-cart"></i> Giỏ hàng của bạn</h1>
+                    <p class="cart-subtitle">Quản lý các dịch vụ bạn muốn đặt</p>
+                </div>
+
+                <div class="cart-content">
+                    <!-- Cart Items Section -->
+                    <div class="cart-items-section">
+                        <div class="cart-items-header">
+                            <h3>Dịch vụ đã chọn (<span id="cart-items-count">0</span>)</h3>
+                            <button class="clear-all-btn" id="clearAllBtn" style="display: none;">
+                                <i class="fas fa-trash-alt"></i> Xóa tất cả
+                            </button>
+                        </div>
+
+                        <!-- Empty Cart State -->
+                        <div class="empty-cart" id="emptyCart">
+                            <div class="empty-cart-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <h3>Giỏ hàng trống</h3>
+                            <p>Hãy khám phá và thêm các dịch vụ yêu thích vào giỏ hàng của bạn</p>
+                            <a href="/services.html" class="btn-explore">
+                                <i class="fas fa-compass"></i> Khám phá dịch vụ
+                            </a>
+                        </div>
+
+                        <!-- Cart Items List -->
+                        <div class="cart-items-list" id="cartItemsList" style="display: none;">
+                            <!-- Items will be loaded here dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Order Summary Section -->
+                    <div class="order-summary-section" id="orderSummary" style="display: none;">
+                        <div class="summary-card">
+                            <h3 class="summary-title">
+                                <i class="fas fa-receipt"></i> Tổng đơn hàng
+                            </h3>
+                            
+                            <div class="summary-row">
+                                <span>Tạm tính:</span>
+                                <span class="summary-value" id="subtotal">0 đ</span>
+                            </div>
+                            
+                            <div class="summary-row discount-row">
+                                <span><i class="fas fa-tag"></i> Giảm giá:</span>
+                                <span class="summary-value discount-value" id="discount">-0 đ</span>
+                            </div>
+                            
+                            <div class="summary-divider"></div>
+                            
+                            <div class="summary-row total-row">
+                                <span>Tổng cộng:</span>
+                                <span class="summary-value total-value" id="totalAmount">0 đ</span>
+                            </div>                
+
+                            <button class="btn-checkout" id="checkoutBtn">
+                                <i class="fas fa-credit-card"></i> Tiến hành đặt lịch
+                            </button>
+
+                            <div class="summary-benefits">
+                                <div class="benefit-item">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span>Bảo hành 30 ngày</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <i class="fas fa-undo-alt"></i>
+                                    <span>Hoàn tiền nếu không hài lòng</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <i class="fas fa-headset"></i>
+                                    <span>Hỗ trợ 24/7</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Trust Badges -->
+                        <div class="trust-badges">
+                            <div class="trust-badge">
+                                <i class="fas fa-lock"></i>
+                                <span>Thanh toán an toàn</span>
+                            </div>
+                            <div class="trust-badge">
+                                <i class="fas fa-star"></i>
+                                <span>Dịch vụ uy tín</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommended Services -->
+                <div class="recommended-section" id="recommendedSection">
+                    <h3 class="section-title">
+                        <i class="fas fa-heart"></i> Có thể bạn quan tâm
+                    </h3>
+                    <div class="recommended-services" id="recommendedServices">
+                        <!-- Recommended services will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-widget about-widget">
+                        <a href="/home.html" class="footer-logo">
+                            <img src="/assets/logo/Ho_Anh_Tuan.png" alt="Logo">
+                            <span>Dịch vụ Tại Nhà</span>
+                        </a>
+                        <p>Cung cấp các dịch vụ tại nhà chất lượng cao, uy tín và chuyên nghiệp.</p>
+                        <div class="social-links">
+                            <a href="#" class="social-link facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-link instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-link tiktok"><i class="fab fa-tiktok"></i></a>
+                            <a href="#" class="social-link youtube"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-widget">
+                        <h3 class="widget-title">Điều hướng</h3>
+                        <ul class="widget-links">
+                            <li><a href="/home.html">Trang chủ</a></li>
+                            <li><a href="/introduce.html">Giới thiệu</a></li>
+                            <li><a href="/services.html">Dịch vụ</a></li>
+                            <li><a href="/service_price_list.html">Bảng giá</a></li>
+                            <li><a href="/contact.html">Liên hệ</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-widget">
+                        <h3 class="widget-title">Hỗ trợ</h3>
+                        <ul class="widget-links">
+                            <li><a href="/terms.html">Điều khoản sử dụng</a></li>
+                            <li><a href="/privacy.html">Chính sách bảo mật</a></li>
+                            <li><a href="/faq.html">Câu hỏi thường gặp</a></li>
+                            <li><a href="/return_policy.html">Chính sách hoàn tiền</a></li>
+                            <li><a href="/support.html">Trung tâm trợ giúp</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-widget">
+                        <h3 class="widget-title">Liên hệ</h3>
+                        <ul class="contact-info">
+                            <li><i class="fas fa-map-marker-alt"></i> 143 Linh Trung, Thủ Đức, HCM</li>
+                            <li><i class="fas fa-phone-alt"></i> 0783 998 046</li>
+                            <li><i class="fas fa-envelope"></i> tuanhopq2019@gmail.com</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 Dịch vụ Tại Nhà. All rights reserved. Thiết kế bởi Hồ Anh Tuấn</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top"><i class="fas fa-chevron-up"></i></button>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Đang xử lý...</p>
+    </div>
+
+    <!-- Success Alert -->
+    <div id="success-alert" class="alert success-alert" style="display: none;">
+        <div class="alert-content">
+            <i class="fas fa-check-circle"></i>
+            <span id="success-message"></span>
+        </div>
+        <button class="close-alert"><i class="fas fa-times"></i></button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="/js/notification.js?v=1.2"></script>
+    <script src="/js/cart.js"></script>
+</body>
+</html>

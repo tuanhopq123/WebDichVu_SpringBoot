@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cảm ơn bạn | Dịch Vụ Tại Nhà</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body, html { margin:0; padding:0; height:100%; background:#f8fff9; font-family:'Roboto',sans-serif; }
+        .container { 
+            min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; 
+            text-align:center; padding:20px; 
+        }
+        .success-icon { 
+            font-size:80px; color:#27ae60; margin-bottom:20px; 
+            animation: bounce 2s infinite;
+        }
+        h1 { font-size:2.5rem; color:#2c3e50; margin:0 0 16px 0; }
+        p { font-size:1.2rem; color:#555; max-width:600px; line-height:1.6; margin:10px 0; }
+        .highlight { color:#e74c3c; font-weight:600; }
+        .buttons { margin-top:40px; display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
+        .btn { 
+            padding:14px 32px; border-radius:50px; text-decoration:none; font-weight:500; 
+            transition:all 0.3s; display:inline-block;
+        }
+        .btn-primary { background:#27ae60; color:white; }
+        .btn-outline { border:2px solid #27ae60; color:#27ae60; background:transparent; }
+        .btn:hover { transform:translateY(-3px); box-shadow:0 10px 20px rgba(39,174,96,0.2); }
+        .small { font-size:0.95rem; color:#777; margin-top:30px; }
+        @keyframes bounce {
+            0%,100% { transform:translateY(0); }
+            50% { transform:translateY(-15px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h1>Đặt lịch thành công!</h1>
+        <p>Cảm ơn bạn đã tin tưởng <span class="highlight">Dịch Vụ Tại Nhà</span></p>
+        <p>Chúng tôi đã nhận được yêu cầu và sẽ liên hệ xác nhận trong vòng <strong>30 phút - 2 giờ</strong>.</p>
+        <p>Bạn có thể kiểm tra chi tiết đơn hàng bất kỳ lúc nào trong mục <strong>Đơn đặt lịch</strong>.</p>
+
+        <div class="buttons">
+            <a href="/home.html" class="btn btn-primary">
+                <i class="fas fa-home"></i> Về trang chủ
+            </a>
+            <a href="/my_bookings.html" class="btn btn-outline">
+                <i class="fas fa-list-alt"></i> Xem đơn của tôi
+            </a>
+        </div>
+
+        <div class="small">
+            Hotline hỗ trợ: <strong>0783 998 046</strong> (8h - 20h mỗi ngày)
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Nhân Viên | Dịch Vụ Tại Nhà</title>
+    
+    <link href="/nhanvien/css/style_employee.css" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <div id="toast-container"></div>
+</head>
+<body>
+    
+    <header class="employee-header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-briefcase"></i>
+                <span>Trang Nhân Viên</span>
+            </div>
+            <div class="user-info">
+                <span>Xin chào, <strong id="employee-name">...</strong></span>
+                <a href="#" id="logout-link"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+            </div>
+        </div>
+    </header>
+
+    <nav class="employee-nav">
+        <div class="nav-container">
+            <a href="#invitations" class="nav-item active" data-page="my_invitations">
+                <i class="fas fa-envelope-open-text"></i> Lời mời mới
+                <span class="badge" id="invitation-count-badge" style="display: none;">0</span>
+            </a>
+
+            <a href="#payment_confirmations" class="nav-item" data-page="payment_confirmations">
+                <i class="fas fa-check-double"></i> Xác nhận thanh toán
+                <span class="badge" id="payment-confirm-badge" style="display: none;">0</span>
+            </a>
+
+            <a href="#my_earnings" class="nav-item" data-page="my_earnings">
+                <i class="fas fa-dollar-sign"></i> Thu nhập
+            </a>
+
+            <a href="#my_history" class="nav-item" data-page="my_history">
+                <i class="fas fa-history"></i> Lịch sử công việc
+            </a>
+
+            <a href="#my_profile" class="nav-item" data-page="my_profile">
+              <i class="fas fa-user-circle"></i> Hồ sơ của tôi
+            </a>
+        </div>
+    </nav>
+
+    <main class="employee-main-content">
+        <div class="content-container" id="employee-dynamic-content">
+            <p>Đang tải dữ liệu...</p>
+        </div>
+    </main>
+
+    <template id="invitation-card-template">
+        <div class="invitation-card">
+            <div class="card-header">
+                <span class="service-name"></span>
+                <span class="time-ago"></span>
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span class="thoi-gian-dat"></span>
+                </div>
+                <div class="info-row">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span class="dia-chi"></span>
+                </div>
+                <div class="info-row">
+                    <i class="fas fa-sticky-note"></i>
+                    <span class="ghi-chu"></span>
+                </div>
+            </div>
+            <div class="card-actions">
+                <button class="btn btn-sm btn-secondary btn-view-details">
+                    <i class="fas fa-eye"></i> Xem
+                </button>
+                <button class="btn btn-sm btn-danger btn-reject">
+                    <i class="fas fa-times"></i> Từ chối
+                </button>
+                <button class="btn btn-sm btn-success btn-accept">
+                    <i class="fas fa-check"></i> Chấp nhận
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <script src="/nhanvien/js/auth.js" type="module"></script>
+    <script src="/nhanvien/js/utils.js" type="module"></script>
+    <script src="/nhanvien/js/my_invitations.js" type="module"></script>    
+    <script src="/nhanvien/js/employee_app.js" type="module"></script>
+
+    <div class="modal-backdrop" id="order-details-modal">
+        
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <h3 class="modal-title">Chi Tiết Đơn Hàng</h3>
+                <button class="modal-close-btn" id="modal-close-x-btn">&times;</button>
+            </div>
+            
+            <div class="modal-body" id="modal-body-content">
+                </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modal-close-footer-btn">Đóng</button>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
