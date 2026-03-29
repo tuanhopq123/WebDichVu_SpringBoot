@@ -3,6 +3,7 @@ import { fetchWithAuthCheck } from './api.js';
 
 let currentChatUser = null;
 
+// --- KHỞI TẠO ---
 export function initServiceChat() {
     console.log('🚀 Init Admin Chat...');
 
